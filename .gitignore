@@ -3,3 +3,10 @@ __pycache__/
 *.pyc
 .env
 pahl_col_row_test.py
+palh_test.gcode
+sun_pp_draw.py
+e_axis_push_test_log.txt
+e_axis_push_test_dispense.gcode
+e_axis_push_test_aspirate.gcode
+dispense_e_axis_push_test.py
+aspirate_e_axis_push_test.py
