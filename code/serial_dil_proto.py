@@ -8,8 +8,8 @@
 #   gravimetric cailbration can be used to determine appropriate E first and second stop values for accurate pipetting action.
 A1_X = 21
 A1_Y = 100.5
-SAFE_Z = 6
-WELL_Z = SAFE_Z - 11.5
+SAFE_Z = 0
+WELL_Z = SAFE_Z - 10.5
 WELL_SPACING= 9
 
 ABS_Z_OFFSET = 15
@@ -41,7 +41,6 @@ def write_line(file,command,comment=None): # internal fxn to write a line of gco
         file.write(f"{command};{comment}\n")
     else:
         file.write(f"{command}\n")
-
 
 def preamble(file): # write gcode commands to set up the printer for pipetting
         write_line(file,"M302 P1 S0","Enable E axis use by allowing Cold extrusion")
@@ -84,15 +83,12 @@ def pipette_actions(file,pipette_action = 'dispense',skip_raise=False): # intern
     if pipette_action == 'dispense': # if action is not mix or aspirate, reset E to first stop after action
         write_line(file,f"G0 E{E_FIRST_STOP} F1000", "reset E to first stop after pipette action")
 
-
 def reservoir_action(file): # internal fxn to perform pipette action for reservoir, moving above reservoir and then lowering and raising pipette to simulate aspiration of liquid
     write_line(file,f"G0 Z{RES_Z:.2f} F300", "Move to safe Z height before moving to reservoir")
     write_line(file,f"G0 X{RES_X:.2f} Y{RES_Y:.2f} Z{RES_Z:.2f} F3000", "align XY above reservoir")
     pipette_actions(file,'aspirate')
     write_line(file,f"G0 Z{RES_Z:.2f} F300", "Move to safe Z height before moving to reservoir")
-
             
-
 
 def solvent_fill_action(file,curr_x_pos=0,curr_y_pos=0,columns=12,rows=8): #f
     for i in range(rows):
@@ -110,7 +106,6 @@ def serial_dilution(file,curr_x_pos=0,curr_y_pos=0,columns=12,rows=8): # interna
     vertical_half_sd_action(file,curr_x_pos,curr_y_pos_bot_half,columns,rows)
     write_line(file,"G0 X0.00 Y0.00 F3000", "Move back to A1")
 
-
 def vertical_half_sd_action(file,curr_x_pos=0,curr_y_pos=0,columns=12,rows=8): # internal fxn that performs pipette action for each row of the plate, moving down half columns and then back up to the intital column at the end
     y = curr_y_pos
     for i in range(columns):
@@ -118,7 +113,6 @@ def vertical_half_sd_action(file,curr_x_pos=0,curr_y_pos=0,columns=12,rows=8): #
         x = curr_x_pos + i*WELL_SPACING
         stock_action(file)
         serial_dilution_action(file,x,y)
-
     
 def stock_action(file,pipette_action='aspirate'): # internal fxn to perform pipette action for stock solution, moving above stock and then lowering and raising pipette to simulate aspiration of liquid
     # grab the stock solution
@@ -129,7 +123,6 @@ def stock_action(file,pipette_action='aspirate'): # internal fxn to perform pipe
 
 
 def discard_action(file): # internal fxn to perform pipette action for discarding liquid, moving above discard location and then lowering and raising pipette to simulate discarding liquid
-    
     write_line(file,f"G0 Z{DISCARD_Z:.2f} F3000", "Move to safe Z height before moving to discard location")
     write_line(file,f"G0 X{DISCARD_X:.2f} Y{DISCARD_Y:.2f} F3000", "align XY above discard location")
     pipette_actions(file,'dispense')
@@ -149,9 +142,7 @@ def serial_dilution_action(file,x=0,y=0,transfer_steps=3):
             pipette_actions(file,'dispense',skip_raise=True)
             pipette_actions(file,'mix')
 
-
-
-def main():
+def main(): # generate gcode file for performing 4 1:2 serial dilution 24 times on a 96 well plate, with mixing after each dispense.
     with open("24_4_1n2_sd_prot.gcode", "w") as file:
         preamble(file)
         set_a1_origin(file)
