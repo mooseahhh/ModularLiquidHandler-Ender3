@@ -20,7 +20,7 @@ RES_Y = 90.5
 RES_Z = SAFE_Z + ABS_Z_OFFSET
 RES_Z_DEPTH = WELL_Z - 2 
 
-# after solvent fill, program will prompt user to replace reservoir with waste plate, so discard location is set to reservoir location
+# after solvent fill fxn, program will prompt user to replace reservoir with waste plate, so discard location is set to reservoir location by default
 DISCARD_X = RES_X
 DISCARD_Y = RES_Y
 DISCARD_Z = SAFE_Z + ABS_Z_OFFSET
@@ -35,6 +35,15 @@ E_ZERO_STOP = 160
 E_FIRST_STOP = 0
 E_SECOND_STOP = -40
 
+
+def main(): # generate gcode file for performing 4 1:2 serial dilution 24 times on a 96 well plate, with mixing after each dispense.
+    with open("24_4_1n2_sd_prot.gcode", "w") as file:
+        preamble(file)
+        set_a1_origin(file)
+        solvent_fill_action(file)
+        write_line(file,"M117","Replace reservoir with waste plate, then press continue")
+        write_line(file, "M0","Paused") 
+        serial_dilution(file)
 
 def write_line(file,command,comment=None): # internal fxn to write a line of gcode to the file, with an optional comment
     if comment:
@@ -56,22 +65,21 @@ def set_a1_origin(file): # set A1 center as origin for all subsequent movements
     write_line(file,f"G0 X{A1_X:.2f} Y{A1_Y:.2f} F3000", "Move to A1 center") 
     write_line(file,f"G92 X0 Y0", "set A1 center as origin") 
 
-
-def dispense_action(file): # internal fxn to perform dispensing liquid action for pipette
+def dispense_action(file): # performs pipette dispensing 
     write_line(file,f"G0 Z{WELL_Z:.2f}","lower into well")
     write_line(file, f"G1 E{E_FIRST_STOP} ", "Expel 1st stop")
     write_line(file, f"G1 E{E_SECOND_STOP} ", "Expel  2nd stop")
-def aspire_action(file): # internal fxn to perform aspriating liquid action for pipette
+def aspire_action(file): # performs pipette aspiration
     write_line(file,f"G1 E{E_FIRST_STOP}","preliminary retrurn to first stop to ensure accurate aspiration")
     write_line(file,f"G0 Z{WELL_Z:.2f}","lower into well")
     write_line(file, f"G1 E{E_ZERO_STOP} F1000", "aspirate liquid")
-def mixing_action(file,mixing_cycles=2): # internal fxn that performs mixing action for pipette
+def mixing_action(file,mixing_cycles=2): # perfoms pipette solution mixing
     for i in range(mixing_cycles): 
         write_line(file,f"G0 E{E_ZERO_STOP} F1500", "Aspriate to E zero stop")
         write_line(file,f"G0 E{E_FIRST_STOP}", "Expel to E first stop")
     write_line(file,f"G0 E{E_ZERO_STOP} F1000", "Aspriate to E zero stop")
 
-def pipette_actions(file,pipette_action = 'dispense',skip_raise=False): # internal fxn for pipette to enter perform and action and exit well
+def pipette_actions(file,pipette_action = 'dispense',skip_raise=False): # navigates pipette actions
     if pipette_action == 'dispense':
         dispense_action(file)
     elif pipette_action == 'aspirate':
@@ -83,19 +91,19 @@ def pipette_actions(file,pipette_action = 'dispense',skip_raise=False): # intern
     if pipette_action == 'dispense': # if action is not mix or aspirate, reset E to first stop after action
         write_line(file,f"G0 E{E_FIRST_STOP} F1000", "reset E to first stop after pipette action")
 
-def reservoir_action(file): # internal fxn to perform pipette action for reservoir, moving above reservoir and then lowering and raising pipette to simulate aspiration of liquid
+def solvent_action(file): # pathing to and drawing solvent
     write_line(file,f"G0 Z{RES_Z:.2f} F300", "Move to safe Z height before moving to reservoir")
     write_line(file,f"G0 X{RES_X:.2f} Y{RES_Y:.2f} Z{RES_Z:.2f} F3000", "align XY above reservoir")
     pipette_actions(file,'aspirate')
     write_line(file,f"G0 Z{RES_Z:.2f} F300", "Move to safe Z height before moving to reservoir")
             
 
-def solvent_fill_action(file,curr_x_pos=0,curr_y_pos=0,columns=12,rows=8): #f
+def solvent_fill_action(file,curr_x_pos=0,curr_y_pos=0,columns=12,rows=8): # adds solvent to all wells row by row
     for i in range(rows):
         y = curr_y_pos + -i*WELL_SPACING
         for j in range(columns):
             x = curr_x_pos + j*WELL_SPACING
-            reservoir_action(file)
+            solvent_action(file)
             write_line(file,f"G0 X{x:.2f} Y{y:.2f} F2000", f"column {j}, row {i}")
             pipette_actions(file)
     write_line(file,"G0 X0.00 Y0.00 F3000", "Move back to A1")
@@ -136,19 +144,14 @@ def serial_dilution_action(file,x=0,y=0,transfer_steps=3):
     for d in range (transfer_steps):
         write_line(file,f"G0 X{x:.2f} Y{y+WELL_SPACING*-(d+1):.2f} F3000", f"Move to next column for dilution {d+1}")
         if d==transfer_steps-1: # if last dilution, dispense, mix, and discard liquid
+            pipette_actions(file, 'dispense', skip_raise=True)
             pipette_actions(file, 'mix')
-            
+            discard_action(file)  
         else:
             pipette_actions(file,'dispense',skip_raise=True)
             pipette_actions(file,'mix')
 
-def main(): # generate gcode file for performing 4 1:2 serial dilution 24 times on a 96 well plate, with mixing after each dispense.
-    with open("24_4_1n2_sd_prot.gcode", "w") as file:
-        preamble(file)
-        set_a1_origin(file)
-        solvent_fill_action(file)
-        write_line(file, "M0","Replace reservoir with waste plate, then press continue") 
-        serial_dilution(file)
+
         
 
 if __name__ == "__main__":

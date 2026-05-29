@@ -1,14 +1,18 @@
-# this program ensures well plate alignment  
-
+# this program is used to calibrate well plate alignment and test z height immersion for pipette into the wells.
 
 A1_X = 21
 A1_Y = 100.5
-SAFE_Z = 6
-WELL_Z = SAFE_Z - 9.5
+SAFE_Z = 0
+WELL_Z = SAFE_Z - 9.5 
 WELL_SPACING= 9
 DELAY = 500
 
-
+def main():
+    with open("test_col_row_align.gcode", "w") as file:
+        preamble(file)
+        set_a1_origin(file)
+        column_action(file)
+        row_action(file)
 
 def write_line(file,command,comment="None"):
     if comment:
@@ -49,14 +53,6 @@ def row_action(file,curr_y_pos=0,row=8): # perform pipette action for each colum
         write_line(file,f"G4 P{DELAY}", f"Delay for {DELAY} ms")
         lower_raise(file)
     write_line(file,f"G0 X0  Y0 F3000", "Move back to top of row ")
-
-
-def main():
-    with open("test_col_row_calibration.gcode", "w") as file:
-        preamble(file)
-        set_a1_origin(file)
-        column_action(file)
-        row_action(file)
 
 
 if __name__ == "__main__":
