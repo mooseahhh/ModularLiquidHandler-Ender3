@@ -1,6 +1,6 @@
 # Modular Liquid Handler — Ender 3 Pro
 
-![Liquid handler demo](Media/Videos/demo.gif)
+![Liquid handler demo](Media/Videos/Demo.gif)
 
 A **low-cost**, **open-source** liquid handler built by modifying an Ender 3 Pro 3D printer. The base build costs **under $150** and supports single-channel pipetting to a 96-well plate format with semi-automated gravimetric calibration following ISO 8655 methodology.
 
