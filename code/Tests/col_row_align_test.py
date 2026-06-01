@@ -1,7 +1,7 @@
 # this program is used to calibrate well plate alignment and test z height immersion for pipette into the wells.
 
-A1_X = 21
-A1_Y = 100.5
+A1_X = 18
+A1_Y = 107.5
 SAFE_Z = 0
 WELL_Z = SAFE_Z - 9.5 
 WELL_SPACING= 9

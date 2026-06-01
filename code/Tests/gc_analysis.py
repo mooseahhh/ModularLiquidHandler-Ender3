@@ -1,6 +1,6 @@
 # This program helps record gc_test data and generates a text file to be used for gravimetric calibration analysis.
 
-# normal standard temprature and pressure (NTP) conditions are assumed for converting weight to volume, so .998 g is equivalent to 1 mL or 1000 uL.
+# normal standard temprature and pressure (NTP) conditions are assumed for converting weight to volume, so .998 g/1mL.
 
 
 import argparse
@@ -17,13 +17,13 @@ TARGET_VOLUME_UL = 125.0
 def main() -> None:
     args = parse_args()
 
-    cumulative_masses = read_cumulative_masses(
+    all_masses = read_masses(
         raw_path=args.raw_data,
-        clear_after_read=args.clear,
+        clear_after_read= not args.keep_raw,
     )
 
-    rows, summary = analyze_cumulative_masses(
-        cumulative_masses=cumulative_masses,
+    rows, summary = analyze_masses(
+        all_masses=all_masses,
         target_volume_ul=args.target_ul,
     )
 
@@ -41,13 +41,13 @@ def main() -> None:
     print(f"CSV written to: {csv_path}")
     print(f"Summary written to: {summary_path}")
     print()
-    print(f"Average transfer volume: {summary['average_transfer_ul']:.2f} uL")
+    print(f"Average transfer volume: {summary['average_transfer_ul']:.1f} uL")
     print(f"Standard deviation: {summary['standard_deviation_ul']:.2f} uL")
     print(f"CV: {summary['cv_percent']:.2f}%")
     print(f"Mean error: {summary['mean_error_ul']:.2f} uL")
 
 
-def read_cumulative_masses(raw_path: Path, clear_after_read: bool = False) -> list[float]: # Read cumulative mass values from a text file.
+def read_masses(raw_path: Path, clear_after_read: bool = True) -> list[float]: # Read  mass values from a text file.
     if not raw_path.exists():
         raise FileNotFoundError(f"Input file not found: {raw_path}")
     
@@ -60,11 +60,10 @@ def read_cumulative_masses(raw_path: Path, clear_after_read: bool = False) -> li
             continue
         try:
             mass.append(float(stripped))
-        except ValueError as exc:
+        except ValueError:
             raise ValueError(
-                f"Invalid value on line {line_number}: {stripped!r}. "
-                "Expected one numeric mass reading per line."
-            ) from exc
+                f"Invalid value on line {line_number}: {stripped!r}"
+                )
     if clear_after_read:
         raw_path.write_text("", encoding="utf-8")
     return mass
@@ -72,22 +71,21 @@ def read_cumulative_masses(raw_path: Path, clear_after_read: bool = False) -> li
 def grams_to_ul(grams: float, density_g_per_ml: float = WATER_DENSITY_G_PER_ML) -> float: # Convert grams of water to microliters.
     return (grams / density_g_per_ml) * 1000.0
 
-def analyze_cumulative_masses(cumulative_masses: list[float],target_volume_ul: float = TARGET_VOLUME_UL,) -> tuple[list[dict], dict]: # Convert cumulative mass readings into per-transfer results and summary stats.
-    if not cumulative_masses:
+def analyze_masses(all_masses: list[float],target_volume_ul: float = TARGET_VOLUME_UL,) -> tuple[list[dict], dict]: # record all_masses readings into per-transfer results and summary stats.
+    if not all_masses:
         raise ValueError("No mass data found.")
 
     rows = []
-    previous_cumulative = 0.0
+   
 
-    for trial, cumulative_g in enumerate(cumulative_masses, start=1):
-        transfer_g = cumulative_g - previous_cumulative
+    for trial, mass in enumerate(all_masses, start=1):
+        transfer_g = mass
         transfer_ul = grams_to_ul(transfer_g)
         error_ul = transfer_ul - target_volume_ul
         error_percent = (error_ul / target_volume_ul) * 100.0 if target_volume_ul else 0.0
         rows.append(
             {
                 "trial": trial,
-                "cumulative_g": cumulative_g,
                 "transfer_g": transfer_g,
                 "transfer_ul": transfer_ul,
                 "error_ul": error_ul,
@@ -95,7 +93,6 @@ def analyze_cumulative_masses(cumulative_masses: list[float],target_volume_ul: f
             }
         )
 
-        previous_cumulative = cumulative_g
 
     transfer_g_values = [row["transfer_g"] for row in rows]
     transfer_ul_values = [row["transfer_ul"] for row in rows]
@@ -128,7 +125,6 @@ def analyze_cumulative_masses(cumulative_masses: list[float],target_volume_ul: f
 def write_csv(output_path: Path, rows: list[dict]) -> None: # Write trial-level results to CSV
     fieldnames = [
         "trial",
-        "cumulative_g",
         "transfer_g",
         "transfer_ul",
         "error_ul",
@@ -142,9 +138,8 @@ def write_csv(output_path: Path, rows: list[dict]) -> None: # Write trial-level 
             writer.writerow(
                 {
                     "trial": row["trial"],
-                    "cumulative_g": f"{row['cumulative_g']:.4f}",
-                    "transfer_g": f"{row['transfer_g']:.4f}",
-                    "transfer_ul": f"{row['transfer_ul']:.2f}",
+                    "transfer_g": f"{row['transfer_g']:.3f}",
+                    "transfer_ul": f"{row['transfer_ul']:.0f}",
                     "error_ul": f"{row['error_ul']:.2f}",
                     "error_percent": f"{row['error_percent']:.2f}",
                 }
@@ -159,7 +154,7 @@ def write_summary(output_path: Path, summary: dict) -> None: #Write readable sum
         f"Target volume: {summary['target_volume_ul']:.2f} uL\n"
         f"Water density used: {summary['water_density_g_per_ml']:.3f} g/mL\n\n"
         f"Average transfer mass: {summary['average_transfer_g']:.4f} g\n"
-        f"Average transfer volume: {summary['average_transfer_ul']:.2f} uL\n"
+        f"Average transfer volume: {summary['average_transfer_ul']} uL\n"
         f"Standard deviation: {summary['standard_deviation_ul']:.2f} uL\n"
         f"CV: {summary['cv_percent']:.2f}%\n"
         f"Mean error: {summary['mean_error_ul']:.2f} uL "
@@ -171,13 +166,13 @@ def write_summary(output_path: Path, summary: dict) -> None: #Write readable sum
 
 def parse_args() -> argparse.Namespace: # command line arguments for input, outfiles and specifying optional clearing and volume variables
     parser = argparse.ArgumentParser(
-        description="Analyze cumulative gravimetric calibration readings."
+        description="Analyze gravimetric calibration readings."
     )
 
     parser.add_argument(
         "raw_data",
         type=Path,
-        help="Path to raw data text file with one cumulative gram reading per line.",
+        help="Path to raw data text file with one mass reading per line.",
     )
 
     parser.add_argument(
@@ -189,8 +184,8 @@ def parse_args() -> argparse.Namespace: # command line arguments for input, outf
 
     parser.add_argument(
         "--keep-raw",
-        action="store_false",
-        help="Do not clear the raw data file after analysis.",
+        action="store_true",
+        help="Keep raw data file after analysis."
     )
 
     parser.add_argument(

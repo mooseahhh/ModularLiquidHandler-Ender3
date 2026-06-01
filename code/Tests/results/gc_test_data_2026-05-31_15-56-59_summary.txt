@@ -1,0 +1,11 @@
+Gravimetric Calibration Summary
+--------------------------------
+Trial count: 10
+Target volume: 125.00 uL
+Water density used: 0.998 g/mL
+
+Average transfer mass: 0.1266 g
+Average transfer volume: 126.85370741482966 uL
+Standard deviation: 4.10 uL
+CV: 3.23%
+Mean error: 1.85 uL (1.48%)

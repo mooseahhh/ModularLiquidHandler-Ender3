@@ -3,7 +3,7 @@ M302;Check cold extursion temperature constraint
 M17;Enable ALL Stepper Motors
 G28 X Y;Initial Homing of X Y
 G0 Z0.00 F600;Move Z to safe height
-G0 X21.00 Y100.50 F3000;Move to A1 center
+G0 X18.00 Y107.50 F3000;Move to A1 center
 G92 X0 Y0;set A1 center as origin
 G0 X0.00 Y0 F3000;Move to row 1
 G4 P500;Delay for 500 ms
