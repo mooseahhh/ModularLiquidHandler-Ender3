@@ -1,10 +1,27 @@
-# Modular Liquid Handler — from 3D Printer Modification (Ender 3 Pro Base)
-
+# Ender 3 Pro Modular Liquid Handler:
+## A 3D Printer Conversion for Automated Pipetting and Serial Dilutions
 ![Liquid handler demo](Media/Videos/Demo.gif)
 
-A **low-cost**, **open-source** liquid handler built by modifying an Ender 3 Pro 3D printer. The base build costs **under $150** and supports single-channel pipetting to a 96-well plate format with semi-automated gravimetric calibration following ISO 8655 methodology.
 
+A **low-cost**, **open-source** liquid handler built by modifying an Ender 3 Pro 3D printer. The base build costs **under $150** and supports single-channel pipetting to a 96-well plate format with semi-automated gravimetric calibration using ISO 8655 gravimetric principles
 Built as a hands-on educational project to deepen practical understanding of laboratory automation, linear actuator mechanics, and calibration workflows.
+
+
+## Current Gravimetric Calibration Results
+
+[Full Calibration Report](Code/Tests/results/gc_test_data_2026-05-31_15-56-59_summary.txt)
+
+| Metric | Value |
+|----------|----------|
+| Trial Count | 10 |
+| Target Volume | 125.00 µL |
+| Water Density | 0.998 g/mL |
+| Average Transfer Mass | 0.1266 g |
+| Average Transfer Volume | 126.85 µL |
+| Standard Deviation | 4.10 µL |
+| Coefficient of Variation (CV) | 3.23% |
+| Mean Error | +1.85 µL (+1.48%) |
+
 
 ---
 
@@ -14,13 +31,13 @@ Built as a hands-on educational project to deepen practical understanding of lab
 
 The core modification replaces the Ender 3's extruder with a manual pipette mounted  with an actuator on the X-axis carriage. The printer's existing motion system handles X/Y positioning; a custom Z-axis height and E-axis (extruder stepper) movement drives the actuator for pipette aspiration and dispensing.
 
-**Key design decisions:**
+**Key Design Decisions:**
 
 - **Linear Actuator use** — built first as a standalone unit to understand linear actuator mechanics before integration. Mount design adapted from published open-source lab automation work with a modified push plate to fit P1000 manual pipette.
-- **Well plate deck** — the stock printer bed has low friction, causing well plate drift during protocol runs from repeated tip impacts. Custom clamps were designed and iterated to secure customly designed 96-well plate deck and reservoir holders rigidly to the bed.
+- **Well plate deck** — the stock printer bed has low friction, causing well plate drift during protocol runs from repeated tip impacts. Custom clamps were designed and iterated to secure a custom 96-well plate deck and reservoir holders.
 - **Pipette** — standard manual P1000 single-channel pipette. The actuator drives the plunger through its three mechanical stops (upper stop, soft stop, hard stop) under G-code control.
-- **Design and Operate a 24 4 1:2 Serial Dilution protocol** to showcase application.
-
+- **Gravemetric Calibration** semi-automated gravemetric calibration program for repeat testing and analysis
+- Implementation of a 24 × 4-step 1:2 serial dilution protocol
 
 **Planned expansion:** Raspberry Pi + OctoPrint integration for network control and RPi camera-based automation (in development).
 
@@ -66,7 +83,7 @@ Manual pipettes have three mechanical stops:
 Unlike manual operation where stops are felt by resistance, the stepper actuator requires empirical calibration. The approach:
 
 1. Estimate the soft stop E distance by measuring plunger height manually
-2. Use Pronterface to find the E value where the push plate reaches zero stop, and the distance from soft stop to hard stop
+2. Use Pronterface to empirically determine the E-axis positions corresponding to the pipette's upper, first, and second stops.
 3. Update `E_ZERO_STOP`, `E_FIRST_STOP`, `E_SECOND_STOP` constants in `gc_volume_test.py`
 4. Validate with gravimetric calibration (see below)
 
@@ -84,16 +101,19 @@ Pipette accuracy is validated using gravimetric calibration — measuring the ma
 python gc_volume_test.py
 ```
 
-Outputs `test_col_row_calibration.gcode`. The protocol runs `TRIAL_NUM` (default: 5) aspirate/dispense cycles, pausing after each dispense with an M117 display prompt and M0 host pause to allow scale reading.
+Outputs `gc_calibration.gcode`. 
+- The protocol runs `TRIAL_NUM` (default: 10) aspirate/dispense cycles, delaying 3 seconds after each aspirate, for the user to tare the scale, and dispense, for the user to read and record the scale reading.
 
 **Step 2 — Run the protocol**
 
-Load the G-code via SD card or Pronterface. After each M0 pause, weigh the dispensed liquid and record the cumulative mass to `raw_data.txt` (one reading per line).
+Load the G-code via SD card or Pronterface. 
+- After an aspiration there will be 3 seconds delay to tare the scale.
+- After a dispense, there will be 3 second delay to read and record one independent mass reading per trial to `raw_data.txt`.
 
 **Step 3 — Analyze results**
 
 ```bash
-python gc_calibration.py raw_data.txt
+python gc_analysis.py raw_data.txt
 ```
 
 Options:
@@ -108,13 +128,13 @@ Outputs a CSV with per-trial transfer mass, volume, and error, plus a summary `.
 Adjust `E_FIRST_STOP` / `E_SECOND_STOP` values based on mean error and re-run until CV and accuracy are within acceptable range.
 
 ---
-## Running Serial Dilution Proctocol
+## Running Serial Dilution Protocol
 
 ![Completed Serial Dilution 96 well plate](Media/Images/IMG_9983.jpeg)
 - Serial Dilution is a critical component in molecular assays, including multiplexing in NGS  Assay and titer concentration curves in ELISA, utilized in diagnostic, clinical, research, and industry
 
 
-**Step 1 — Ensure Calibration tests and Constants**
+**Step 1 — Ensure Z-height and E-axis calibration have been completed.**
 
 **Step 2 — Add Solvent to  Wells**
 - Add solvent reservoir with 50mL of H2O
