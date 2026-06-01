@@ -1,4 +1,4 @@
-# Modular Liquid Handler — Ender 3 Pro
+# Modular Liquid Handler — from 3D Printer Modification (Ender 3 Pro Base)
 
 ![Liquid handler demo](Media/Videos/Demo.gif)
 
