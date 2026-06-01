@@ -53,13 +53,9 @@ def lower_raise(file): # simulates z axis lowering
     write_line(file,f"G0 Z{SAFE_Z:.2f}","raise out of well")
 
 
-def pause(file):
-    write_line(file,"@pause")
-
 def res_path_action(file): # test movements to reservoir, stock solution, A1 center, and z heights
     write_line(file,f"G0 Z{RES_Z:.2f}","safe Z position")
     write_line(file,f"G0 X{RES_X:.2f} Y{RES_Y:.2f} F3000", f"Move to reservoir")
-    pause(file)
     lower_raise(file)
     write_line(file,f"G0 Z{RES_Z:.2f}","safe Z position")
     write_line(file,f"G0 X0 Y0 F3000", f"Move to A1 center")
