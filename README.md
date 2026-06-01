@@ -107,13 +107,14 @@ Adjust `E_FIRST_STOP` / `E_SECOND_STOP` values based on mean error and re-run un
 ## Running Serial Dilution Proctocol
 A serial dilution protocol is a crucial procedure in  important molecular assays, including multiplexing in NGS Assay and titer concentration gradients in ELISA, which have diagnostic, research, and industry applications. 
 ### Work flow 
-## Step 1 - Ensure files are updated from calibration 
+**Step 1 - Ensure files are updated from calibration**
+- ensure calibration tests are done and constants are accurate
 
-## Steps 2 -Fill wells with Solvent
+**Steps 2 -Fill wells with Solvent**
 - add solvent reservoir
 - run solvent_fill.py
 
-## Step 3 - Run Serial Dilution Protocol
+**Step 3 - Run Serial Dilution Protocol**
 - replace solvent reservoir with an empty waste reservoir
 - add stock reservoir in second slot
 - run serial_dilution.py
