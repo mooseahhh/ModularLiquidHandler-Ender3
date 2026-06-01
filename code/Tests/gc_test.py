@@ -26,7 +26,7 @@ def main()-> None:
         preamble(file)
         gc_test(file)
 
-def write_line(file,command,comment=None):
+def write_line(file,command,comment=None) -> None: # write a line to gcode file, with an optional comment
     if comment:
         file.write(f"{command};{comment}\n")
     else:
