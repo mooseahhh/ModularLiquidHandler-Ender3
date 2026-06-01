@@ -104,6 +104,20 @@ Outputs a CSV with per-trial transfer mass, volume, and error, plus a summary `.
 Adjust `E_FIRST_STOP` / `E_SECOND_STOP` values based on mean error and re-run until CV and accuracy are within acceptable range.
 
 ---
+## Running Serial Dilution Proctocol
+A serial dilution protocol is a crucial procedure in  important molecular assays, including multiplexing in NGS Assay and titer concentration gradients in ELISA, which have diagnostic, research, and industry applications. 
+### Work flow 
+## Step 1 - Ensure files are updated from calibration 
+
+## Steps 2 -Fill wells with Solvent
+- add solvent reservoir
+- run solvent_fill.py
+
+## Step 3 - Run Serial Dilution Protocol
+- replace solvent reservoir with an empty waste reservoir
+- add stock reservoir in second slot
+- run serial_dilution.py
+
 
 ## Repository Structure-(files referred shown)
 
@@ -112,8 +126,9 @@ ModularLiquidHandler-Ender3/
 ├── CAD/                  # AutoDesk Fusion source files
 ├── STL/                  # Print-ready STL files for all custom parts
 ├── Code/
-│   ├── gc_volume_test.py     # Generates gravimetric calibration G-code
-│   └── gc_calibration.py     # Analyzes raw mass data, outputs CSV + summary
+├── --/Tests    
+│     ├── gc_volume_test.py     # Generates gravimetric calibration G-code
+│     └── gc_calibration.py     # Analyzes raw mass data, outputs CSV + summary
 ├── References/
 │   ├── BOM.csv               # Full bill of materials with sourcing
 │   └── ...
