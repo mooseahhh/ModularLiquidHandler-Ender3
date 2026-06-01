@@ -1,5 +1,7 @@
 # Modular Liquid Handler — Ender 3 Pro
 
+![Liquid handler demo](Media/Videos/demo.gif)
+
 A **low-cost**, **open-source** liquid handler built by modifying an Ender 3 Pro 3D printer. The base build costs **under $150** and supports single-channel pipetting to a 96-well plate format with semi-automated gravimetric calibration following ISO 8655 methodology.
 
 Built as a hands-on educational project to deepen practical understanding of laboratory automation, linear actuator mechanics, and calibration workflows.
@@ -8,14 +10,16 @@ Built as a hands-on educational project to deepen practical understanding of lab
 
 ## Hardware Overview
 
+![Setting Up Mount](Media/Images/IMG_9890.jpeg)
+
 The core modification replaces the Ender 3's extruder with a manual pipette mounted  with an actuator on the X-axis carriage. The printer's existing motion system handles X/Y positioning; a custom Z-axis height and E-axis (extruder stepper) movement drives the actuator for pipette aspiration and dispensing.
 
 **Key design decisions:**
 
-- **Syringe pump** — built first as a standalone unit to understand linear actuator mechanics before integration. Mount design adapted from published open-source lab automation work with a modified push plate to fit available hardware.
+- **Linear Actuator use** — built first as a standalone unit to understand linear actuator mechanics before integration. Mount design adapted from published open-source lab automation work with a modified push plate to fit P1000 manual pipette.
 - **Well plate deck** — the stock printer bed has low friction, causing well plate drift during protocol runs from repeated tip impacts. Custom clamps were designed and iterated to secure customly designed 96-well plate deck and reservoir holders rigidly to the bed.
 - **Pipette** — standard manual P1000 single-channel pipette. The actuator drives the plunger through its three mechanical stops (upper stop, soft stop, hard stop) under G-code control.
-- **Design and Operate a 24 4 1:2 Serial Dilution protocol to showcase application.
+- **Design and Operate a 24 4 1:2 Serial Dilution protocol** to showcase application.
 
 
 **Planned expansion:** Raspberry Pi + OctoPrint integration for network control and RPi camera-based automation (in development).
@@ -102,6 +106,29 @@ Outputs a CSV with per-trial transfer mass, volume, and error, plus a summary `.
 **Step 4 — Iterate**
 
 Adjust `E_FIRST_STOP` / `E_SECOND_STOP` values based on mean error and re-run until CV and accuracy are within acceptable range.
+
+---
+## Running Serial Dilution Proctocol
+
+![Completed Serial Dilution 96 well plate](Media/Images/IMG_9983.jpeg)
+- Serial Dilution is a critical component in molecular assays, including multiplexing in NGS  Assay and titer concentration curves in ELISA, utilized in diagnostic, clinical, research, and industry
+
+
+**Step 1 — Ensure Calibration tests and Constants**
+
+**Step 2 — Add Solvent to  Wells**
+- Add solvent reservoir with 50mL of H2O
+- run solvent_fill.py
+- load and print solvent_fill_prot.gcode
+
+
+**Step 3 — Run Serial Dilution**
+- replace solvent reservoir  with empty waste reservoir
+- add stock reservoir in second slot - add 40 mL and 20 drops of blue dye
+- run serial_dilution.py
+- load and print 24_4_1n2_sd_prot.gcode
+
+
 
 ---
 
