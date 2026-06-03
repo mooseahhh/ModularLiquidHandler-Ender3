@@ -17,12 +17,21 @@ Mechanical design: [Creative Commons Attribution 4.0 International](http://creat
 
 ## Features
 
-- **Low cost** — base build under $150 using a used/refurbished Ender 3 Pro; accessible without institutional funding
-- **Modular hardware** — built on a widely-supported 3D printer platform running open-source Marlin firmware; components are replaceable and the design is forkable
-- **Precise, calibrated dispensing** — semi-automated gravimetric calibration workflow CV%, Average transfer g, Average transfer uL tracked as acceptance metrics
-- **Network connectivity** — full remote operation via OctoPrint + OctoEverywhere: file uploads, G-code terminal, protocol monitoring, and calibration runs without physical access
-- **Security** - OcotoEverywhere application prevents need of port forwarding and/or explicit firewall rules to retain security in private network. Camera also provides remote monitoring of access.
-- **Demonstrated application** — 24-column, 4-step 1:2 serial dilution protocol across a full 96-well plate in a 2-hour automated run; the same architecture supports other repetitive liquid handling workflows such as master mix dispensing and reagent normalization
+- **Low cost** —
+  -  base build under $150 using a used/refurbished Ender 3 Pro; accessible without institutional funding
+- **Modular hardware** —
+ -  built on a widely-supported 3D printer platform running open-source Marlin firmware; components are replaceable and the design is forkable
+- **Precise, calibrated dispensing** —
+  - semi-automated gravimetric calibration workflow CV%, Average transfer g, Average transfer uL tracked as acceptance metrics
+  - well alignment, pipette well and reservoir immersion testing
+- **Network connectivity** —
+  - full remote operation via OctoPrint + OctoEverywhere: file uploads, G-code terminal, protocol monitoring, and calibration runs without physical access
+- **Security** —
+  - OctoEverywhere application prevents need of port forwarding and/or explicit firewall rules to retain security in private network.
+  - Camera also provides remote monitoring of access.
+- **Demonstrated application** —
+  - 24-column, 4-step 1:2 serial dilution protocol across a full 96-well plate in a 2-hour automated run provided
+- 
 ---
 
 
