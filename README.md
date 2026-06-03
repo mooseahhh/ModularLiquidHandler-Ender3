@@ -7,11 +7,11 @@ Mechanical design: [Creative Commons Attribution 4.0 International](http://creat
 
 [![CC BY 4.0](https://licensebuttons.net/l/by/4.0/88x31.png)](http://creativecommons.org/licenses/by/4.0/)
 ---
-# Modular, Remotely Accessable, Open Source Liquid Handler — Ender 3 Pro
+# Modular, Remotely Accessible, Open Source Liquid Handler — Ender 3 Pro
 ![Liquid handler demo](Media/Videos/Demo.gif)
 
-#### To provide automation accessiblity, This project showcases a fully functional, network/remote-access capable liquid handler built by modifying a used Ender 3 Pro 3D printer for **under $150**.
-- Supports single-channel pipetting to a 96-well plate format with semi-automated gravimetric calibration following ISO 8655 methodology, remote operation via OctoPrint and OctoEverywhere, and an open, modifiable codebase designed for extension.
+#### This project showcases a fully functional, network/remote-access capable liquid handler built by modifying a used Ender 3 Pro 3D printer for **under $150**.
+- Supports single-channel pipetting to a 96-well plate format using gravimetric calibration principles described in ISO 8655, remote operation via OctoPrint and OctoEverywhere, an open, modifiable codebase designed for extension,and the execution of laboratory protocols using custom Python and G-code workflows.
 ---
 ## Features
 - **Low cost** —
@@ -28,20 +28,27 @@ Mechanical design: [Creative Commons Attribution 4.0 International](http://creat
 - **Demonstrated Application** —
   - 24-column, 4-step 1:2 serial dilution protocol across a full 96-well plate in a 2-hour automated run
 ---
+## Current Validation Results
+| Metric | Value |
+|---|---|
+| Target Volume | 125.0 µL |
+| Mean Volume | 126.85 µL |
+| Mean Error | +1.85 µL (+1.48%) |
+| Standard Deviation | 4.10 µL |
+| CV | 3.23% |
+| Trial Count | 10 |
+---
 ## Table of Contents
 - [License](#license)
+- [Current Validaion Results](#current-validation-results)
 - [Build Resources](#build-resources)
   - [BOM(Bill of Materials)](#bom-bill-of-materials)
   - [CAD](#cad)
 - [Software & Plugins](#software--plugins)
-- [ Repository Structure](#repository-structure)
+- [Repository Structure](#repository-structure)
 - [Calibration](#calibration)
-  - [Z-Height Calibration](#z-height-calibration)
-  - [E-Axis Calibration](#e-axis-pipette-stop-calibration)
-  - [Gravimetric Calibration](#gravimetric-calibration)
 - [Serial Dilution Protocol](#serial-dilution-protocol)
 - [Checklist / Roadmap](#checklist--roadmap)
-
 
 ---
 
@@ -60,19 +67,22 @@ Mechanical design: [Creative Commons Attribution 4.0 International](http://creat
 
 Full BOM with sourcing notes: [`References/BOM.csv`](References/BOM.csv)
 
-
 ---
 
 ### CAD
 
-All custom parts are designed in Autodesk Fusion. Source files are in `/CAD`; print-ready STLs are in `/STL`.
+All custom parts are designed in Autodesk Fusion. Source files are in `/CAD`; 
+- print-ready STLs are in `/STL_files`
+- modifiable F3D files are in `F3D_files`
 
-| Component  | STL file | f3d file |
+| Component  | STL file | F3D file |
 |---|---|---|
-| Pipette adapter mount | [`/CAD/STL_files/lh_arm_mount_i1.stl`]( CAD/STL_files/lh_arm_mount_i1.stl)|[`CAD/F3D_files/lh_arm_mount_i1.f3d`](CAD/F3D_files/lh_arm_mount_i1.f3d) |
-| 96-well plate deck|[`/CAD/STL_files/96_wp_deck_i2.stl`](/CAD/STL_files/96_wp_deck_i2.stl)| [`/CAD/F3D_files/96_wp_deck_i2.f3d`](/CAD/F3D_files/96_wp_deck_i2.f3d)|
-| Reservoir holder |[`/CAD/STL_files/dual_holder_minicups_i1.stl`](/CAD/STL_files/dual_holder_minicups_i1.stl) | [`/CAD/F3D_files/dual_holder_minicups_i1.f3d`](/CAD/F3D_files/dual_holder_minicups_i1.f3d) |
-| Deck2Bed clamps |[`CAD/STL_files/deck2bedClamp_i1.stl`](CAD/STL_files/deck2bedClamp_i1.stl)|[`/CAD/F3D_files/deck2bedClamp_i1.f3d`](/CAD/F3D_files/deck2bedClamp_i1.f3d)|
+| Liquid handler arm mount | [`lh_arm_mount_i1.stl`]( CAD/STL_files/lh_arm_mount_i1.stl)|[`lh_arm_mount_i1.f3d`](CAD/F3D_files/lh_arm_mount_i1.f3d) |
+| Pipette adapter mount | [`pipette_holder_s2_i2.stl`]( CAD/STL_files/pipette_holder_s2_i2.stl)|N/A |
+| 96-well plate deck|[`96_wp_deck_i2.stl`](/CAD/STL_files/96_wp_deck_i2.stl)| [`96_wp_deck_i2.f3d`](/CAD/F3D_files/96_wp_deck_i2.f3d)|
+| Reservoir holder |[`dual_holder_minicups_i1.stl`](/CAD/STL_files/dual_holder_minicups_i1.stl) | [`dual_holder_minicups_i1.f3d`](/CAD/F3D_files/dual_holder_minicups_i1.f3d) |
+| Deck2Plate clamps |[`deck2plateClamp_I1.stl`](CAD/STL_files/deck2plateClamp_I1.stl)|[`deck2plateClamp_I1.f3d`](/CAD/F3D_files/deck2plateclamp_i1.f3d)|
+| Deck2Bed clamps |[`deck2bedClamp_i1.stl`](CAD/STL_files/deck2bedClamp_i1.stl)|[`deck2bedClamp_i1.f3d`](/CAD/F3D_files/deck2bedClamp_i1.f3d)|
 
 ---
 
@@ -95,17 +105,16 @@ Setup guide: [OctoPrint on Raspberry Pi (YouTube)](https://www.youtube.com/watch
 ## Repository Structure
 ```
 ModularLiquidHandler-Ender3/
-├── CAD/                      # Autodesk Fusion source files
-├── STL/                      # Print-ready STL files for all custom parts
+├── CAD/
+├── STL/
 ├── Code/
-    Tests/
-│   ├── gc_test.py     # Generates gravimetric calibration G-code
-│   ├── gc_calibration.py     # Analyzes raw mass data; outputs CSV + summary
-│  ├── solvent_fill.py       # Generates solvent fill G-code
-│  └── serial_dilution.py    # Generates serial dilution G-code
+│   ├── Tests/
+│   │   ├── gc_test.py
+│   │   └── gc_calibration.py
+│   ├── solvent_fill.py
+│   └── serial_dilution.py
 ├── References/
-│   ├── BOM.csv               # Full bill of materials with sourcing
-│   └── ...
+│   └── BOM.csv
 └── README.md
 ```
 ## Calibration:
@@ -113,7 +122,7 @@ ModularLiquidHandler-Ender3/
 - Z-height was calibrated using Pronterface and G92 Z0.
 - E-axis positions corresponding to the pipette's upper, first, and second stops were determined empirically using gravimetric validation.
 
-### Gravimetric Valibration
+### Gravimetric Calibration
 
 Pipette accuracy is validated by measuring dispensed water mass and converting to volume. Water density at NTP (0.998 g/mL) is used for the conversion. CV% is the primary acceptance metric per ISO 8655.
 
@@ -123,11 +132,11 @@ Pipette accuracy is validated by measuring dispensed water mass and converting t
 python gc_test.py
 ```
 
-Outputs `test_col_row_calibration.gcode`. Runs `TRIAL_NUM` aspirate/dispense cycles (default: 5), pausing after each dispense for scale reading via M0 host pause.
+- Outputs `test_col_row_calibration.gcode`. Runs `TRIAL_NUM` aspirate/dispense cycles (default: 5), pausing after each dispense for scale reading via M0 host pause.
 
 **Step 2 — Run the protocol**
 
-Load G-code via SD card or Pronterface. After each M0 pause, weigh the dispensed liquid and record cumulative mass to `raw_data.txt` (one reading per line).
+- Load G-code via Octoprint or Pronterface. During each trial, tare the scale during the first pause and record mass of the dispensed liquid to `raw_data.txt` (one reading per line) during the second.
 
 **Step 3 — Analyze results**
 
@@ -140,7 +149,7 @@ Options:
 - `--output-dir` — output directory (default: `results/`)
 - `--keep-raw` — do not clear raw data file after analysis
 
-Outputs a CSV with per-trial transfer mass, volume, and error, plus a summary `.txt` with average volume, standard deviation, CV%, and mean error against target.
+- Outputs a CSV with per-trial transfer mass, volume, and error, plus a summary `.txt` with average volume, standard deviation, CV%, and mean error against target.
 
 **Step 4 — Iterate**
 
@@ -180,7 +189,7 @@ Confirm `E_FIRST_STOP`, `E_SECOND_STOP`, and Z-height values are current before 
 - [x] 24-column 4-step 1:2 serial dilution demonstration
 - [x] OctoPrint + OctoEverywhere network integration
 - [ ] RPi camera-based tip detection and alignment
-- [ ] Parameteric reservoir container class program that generates simplified custom mount STL generation
+- [ ] Parametric reservoir holder generator for simplified custom mount STL generation
 - [ ] Multi-channel head expansion
 - [ ] Full protocol scripting interface
 
