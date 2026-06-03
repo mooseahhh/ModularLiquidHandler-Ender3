@@ -1,5 +1,4 @@
 
-# Modular Liquid Handler — Ender 3 Pro
 ## License
 
 Software: [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
@@ -10,29 +9,29 @@ Mechanical design: [Creative Commons Attribution 4.0 International](http://creat
 ---
 
 
-Liquid handling automation is standard practice in modern labs — but commercial systems cost thousands to tens of thousands of dollars, putting them out of reach for hobbyists, teaching labs, indie biotech, and budget-constrained core facilities. This project closes that gap.
-
-A fully functional, networked liquid handler built by modifying a used Ender 3 Pro 3D printer for **under $150**. Supports single-channel pipetting to a 96-well plate format with semi-automated gravimetric calibration following ISO 8655 methodology, remote operation via OctoPrint and OctoEverywhere, and an open, modifiable codebase designed for extension.
-
+# Modular Liquid Handler — Ender 3 Pro
 ![Liquid handler demo](Media/Videos/Demo.gif)
-
 ---
+#### A fully functional, networked liquid handler built by modifying a used Ender 3 Pro 3D printer for **under $150**. 
+- Supports single-channel pipetting to a 96-well plate format with semi-automated gravimetric calibration following ISO 8655 methodology, remote operation via OctoPrint and OctoEverywhere, and an open, modifiable codebase designed for extension.
 
 ## Features
 
 - **Low cost** — base build under $150 using a used/refurbished Ender 3 Pro; accessible without institutional funding
 - **Modular hardware** — built on a widely-supported 3D printer platform running open-source Marlin firmware; components are replaceable and the design is forkable
-- **Precise, calibrated dispensing** — semi-automated gravimetric calibration workflow following ISO 8655; CV% tracked as the primary acceptance metric
-- **Network connectivity** — full remote operation via OctoPrint + OctoEverywhere: file uploads, G-code terminal, protocol monitoring, and calibration runs without physical access; connection secured through OctoEverywhere (no port forwarding required)
-- **Security** - 3rd party application connectivity, OcotoEverywhere prevents need of port forwarding and/or explicit firewall rules to retain security in private network. Camrea also provides remote monitoring of access.
+- **Precise, calibrated dispensing** — semi-automated gravimetric calibration workflow CV%, Average transfer g, Average transfer uL tracked as acceptance metrics
+- **Network connectivity** — full remote operation via OctoPrint + OctoEverywhere: file uploads, G-code terminal, protocol monitoring, and calibration runs without physical access
+- **Security** - OcotoEverywhere application prevents need of port forwarding and/or explicit firewall rules to retain security in private network. Camera also provides remote monitoring of access.
 - **Demonstrated application** — 24-column, 4-step 1:2 serial dilution protocol across a full 96-well plate in a 2-hour automated run; the same architecture supports other repetitive liquid handling workflows such as master mix dispensing and reagent normalization
+---
+
 
 ---
 
 ## Table of Contents
-
+- [License](#license)
 - [Build Resources](#build-resources)
-  - [Bill of Materials](#bill-of-materials)
+  - [BOM (Bill of Materials)](#bom-bill-of-materials)
   - [Needed Tools](#needed-tools)
   - [CAD](#cad)
 - [Software & Plugins](#software--plugins)
@@ -42,7 +41,7 @@ A fully functional, networked liquid handler built by modifying a used Ender 3 P
   - [Gravimetric Calibration](#gravimetric-calibration)
 - [Serial Dilution Protocol](#serial-dilution-protocol)
 - [Checklist / Roadmap](#checklist--roadmap)
-- [License](#license)
+
 
 ---
 
@@ -50,26 +49,18 @@ A fully functional, networked liquid handler built by modifying a used Ender 3 P
 
 ### Bill of Materials(BOM)
 
-**Base build cost: ~$125**
+**Base build cost: ~$130**
 
-| Category | Item | Notes |
+|Main Base Items| Category  | Notes |
 |---|---|---|
-| Motion platform | Creality Ender 3 Pro (used/refurbished) | XYZ gantry + E-axis repurposed for plunger actuation |
-| Pipette | Four E's Scientific P1000 single-channel manual pipette | Set to 125µL; drives through plunger stops via actuator |
-| Deck hardware | Custom 3D-printed clamps, well plate holder, reservoir holders | STL files included in `/STL` |
-| Networking | Raspberry Pi (OctoPrint host) | Enables remote network operation |
-| Misc | M3/M5 hardware, 1.5m stepper cable extension | — |
+|**Creality Ender 3 Pro (used/refurbished)** | Motion platform | XYZ gantry + E-axis repurposed for plunger actuation |
+| **Four E's Scientific P1000 single-channel manual pipette** | Pipette | Set to 125µL; drives through plunger stops via actuator |
+|**Custom 3D-printed clamps, well plate holder, reservoir holders** |Deck hardware| STL files included in `/STL` |
+|**Raspberry Pi (OctoPrint host)** | Networking, Remote Monitoring |  Enables remote network operation |
+|** 1.5m stepper cable extension** | Misc | — |
 
 Full BOM with sourcing notes: [`References/BOM.csv`](References/BOM.csv)
 
----
-
-### Needed Tools
-
-- Calipers
-- Precision screwdriver set (Phillips, T8)
-- Rotary tool (or equivalent — for cutting metal rods)
-- ESD-15 tweezers
 
 ---
 
@@ -77,12 +68,12 @@ Full BOM with sourcing notes: [`References/BOM.csv`](References/BOM.csv)
 
 All custom parts are designed in Autodesk Fusion. Source files are in `/CAD`; print-ready STLs are in `/STL`.
 
-| Component | Description | STL file | f3d file |
+| Component  | STL file | f3d file |
 |---|---|---|
-| Pipette adapter mount | Mounts P1000 pipette to X-axis carriage; includes push plate for actuator contact | [`CAD\STL_files\lh_arm_mount_i1.stl`]( CAD\STL_files\lh_arm_mount_i1.stl)| [``]() |
-| 96-well plate deck | Custom deck with tight-tolerance printed walls to apply onto printed well plate and prevent plate drift |[`CAD\STL_files\96_wp_deck_i2.stl`](CAD\STL_files\96_wp_deck_i2.stl) | [``]() |
-| Reservoir holder | Holds 50mL reservoir tube; slots into bed clamp system |[`CAD\STL_files\dual_holder_minicups_i1.stl`](CAD\STL_files\dual_holder_minicups_i1.stl) | [``]() |
-| Deck2Bed clamps | Secures deck and reservoir holders rigidly to printer bed | |[`CAD\STL_files\deck2bedClamp_i1.stl`](CAD\STL_files\deck2bedClamp_i1.stl) | [``]() |
+| Pipette adapter mount | [`/CAD/STL_files/lh_arm_mount_i1.stl`]( CAD/STL_files/lh_arm_mount_i1.stl)|[`CAD/F3D_files/lh_arm_mount_i1.f3d`](CAD/F3D_files/lh_arm_mount_i1.f3d) |
+| 96-well plate deck|[`/CAD/STL_files/96_wp_deck_i2.stl`](/CAD/STL_files/96_wp_deck_i2.stl)| [`/CAD/F3D_files/96_wp_deck_i2.f3d`](/CAD/F3D_files/96_wp_deck_i2.f3d)|
+| Reservoir holder |[`/CAD/STL_files/dual_holder_minicups_i1.stl`](/CAD/STL_files/dual_holder_minicups_i1.stl) | [`/CAD/F3D_files/dual_holder_minicups_i1.f3d`](/CAD/F3D_files/dual_holder_minicups_i1.f3d) |
+| Deck2Bed clamps |[`CAD/STL_files/deck2bedClamp_i1.stl`](CAD/STL_files/deck2bedClamp_i1.stl)|[`/CAD/F3D_files/deck2bedClamp_i1.f3d`](/CAD/F3D_files/deck2bedClamp_i1.f3d)|
 
 ---
 
