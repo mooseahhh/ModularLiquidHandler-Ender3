@@ -7,41 +7,31 @@ Mechanical design: [Creative Commons Attribution 4.0 International](http://creat
 
 [![CC BY 4.0](https://licensebuttons.net/l/by/4.0/88x31.png)](http://creativecommons.org/licenses/by/4.0/)
 ---
-
-
-# Modular Liquid Handler — Ender 3 Pro
+# Modular, Remote Access Liquid Handler — Ender 3 Pro
 ![Liquid handler demo](Media/Videos/Demo.gif)
----
+
 #### A fully functional, networked liquid handler built by modifying a used Ender 3 Pro 3D printer for **under $150**. 
 - Supports single-channel pipetting to a 96-well plate format with semi-automated gravimetric calibration following ISO 8655 methodology, remote operation via OctoPrint and OctoEverywhere, and an open, modifiable codebase designed for extension.
-
+---
 ## Features
-
 - **Low cost** —
   -  base build under $150 using a used/refurbished Ender 3 Pro; accessible without institutional funding
-- **Modular hardware** —
- -  built on a widely-supported 3D printer platform running open-source Marlin firmware; components are replaceable and the design is forkable
-- **Precise, calibrated dispensing** —
-  - semi-automated gravimetric calibration workflow CV%, Average transfer g, Average transfer uL tracked as acceptance metrics
+- **Modular Hardware** —
+  - built on a widely-supported 3D printer platform running open-source Marlin firmware; components are replaceable and the design is forkable
+- **Precise, Calibrated Dispensing** —
+  - semi-automated gravimetric calibration workflow CV% tracked as a primary acceptance metric
   - well alignment, pipette well and reservoir immersion testing
-- **Network connectivity** —
+- **Network Connectivity** —
   - full remote operation via OctoPrint + OctoEverywhere: file uploads, G-code terminal, protocol monitoring, and calibration runs without physical access
 - **Security** —
-  - OctoEverywhere application prevents need of port forwarding and/or explicit firewall rules to retain security in private network.
-  - Camera also provides remote monitoring of access.
-- **Demonstrated application** —
+  - OctoEverywhere enables remote monitoring and control without exposing the printer through direct port forwarding
+- **Demonstrated Application** —
   - 24-column, 4-step 1:2 serial dilution protocol across a full 96-well plate in a 2-hour automated run provided
-- 
 ---
-
-
----
-
 ## Table of Contents
 - [License](#license)
 - [Build Resources](#build-resources)
   - [BOM (Bill of Materials)](#bom-bill-of-materials)
-  - [Needed Tools](#needed-tools)
   - [CAD](#cad)
 - [Software & Plugins](#software--plugins)
 - [General Usage](#general-usage)
@@ -103,7 +93,7 @@ Setup guide: [OctoPrint on Raspberry Pi (YouTube)](https://www.youtube.com/watch
 
 ---
 
-## General Usage
+## Calibration:
 
 ### Z-Height Calibration
 
@@ -176,17 +166,17 @@ Serial dilution is a foundational technique across molecular assays — includin
 
 ![Completed Serial Dilution 96-well plate](Media/Images/IMG_9983.jpeg)
 
-**Step 1 — Verify calibration constants**
+**Step 1 — Verify Calibration Constants**
 
 Confirm `E_FIRST_STOP`, `E_SECOND_STOP`, and Z-height values are current before running any protocol.
 
-**Step 2 — Fill wells with solvent**
+**Step 2 — Fill Wells with Solvent**
 
 - Add solvent reservoir with 50 mL H₂O
 - Run: `python solvent_fill.py`
 - Load and run: `solvent_fill_prot.gcode`
 
-**Step 3 — Run serial dilution**
+**Step 3 — Run Serial Dilution**
 
 - Replace solvent reservoir with empty waste reservoir
 - Add stock reservoir in second slot (40 mL + 20 drops blue dye)
@@ -203,7 +193,7 @@ Confirm `E_FIRST_STOP`, `E_SECOND_STOP`, and Z-height values are current before 
 - [x] 24-column 4-step 1:2 serial dilution demonstration
 - [x] OctoPrint + OctoEverywhere network integration
 - [ ] RPi camera-based tip detection and alignment
-- [ ] Reservoir container class for simplified custom mount STL generation
+- [ ] Parameteric reservoir container class program that generates simplified custom mount STL generation
 - [ ] Multi-channel head expansion
 - [ ] Full protocol scripting interface
 
