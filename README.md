@@ -1,76 +1,121 @@
-# Ender 3 Pro Modular Liquid Handler:
-## A 3D Printer Conversion for Automated Pipetting and Serial Dilutions
-![Liquid handler demo](Media/Videos/Demo.gif)
+## License
 
+Software: [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
-A **low-cost**, **open-source** liquid handler built by modifying an Ender 3 Pro 3D printer. The base build costs **under $150** and supports single-channel pipetting to a 96-well plate format with semi-automated gravimetric calibration using ISO 8655 gravimetric principles
-Built as a hands-on educational project to deepen practical understanding of laboratory automation, linear actuator mechanics, and calibration workflows.
+Mechanical design: [Creative Commons Attribution 4.0 International](http://creativecommons.org/licenses/by/4.0/)
 
+[![CC BY 4.0](https://licensebuttons.net/l/by/4.0/88x31.png)](http://creativecommons.org/licenses/by/4.0/)
+---
 
-## Current Gravimetric Calibration Results
+# Modular Liquid Handler — Ender 3 Pro
 
-[Full Calibration Report](Code/Tests/results/gc_test_data_2026-05-31_15-56-59_summary.txt)
+Liquid handling automation is standard practice in modern labs — but commercial systems cost thousands to tens of thousands of dollars, putting them out of reach for hobbyists, teaching labs, indie biotech, and budget-constrained core facilities. This project closes that gap.
 
-| Metric | Value |
-|----------|----------|
-| Trial Count | 10 |
-| Target Volume | 125.00 µL |
-| Water Density | 0.998 g/mL |
-| Average Transfer Mass | 0.1266 g |
-| Average Transfer Volume | 126.85 µL |
-| Standard Deviation | 4.10 µL |
-| Coefficient of Variation (CV) | 3.23% |
-| Mean Error | +1.85 µL (+1.48%) |
+A fully functional, networked liquid handler built by modifying a used Ender 3 Pro 3D printer for **under $150**. Supports single-channel pipetting to a 96-well plate format with semi-automated gravimetric calibration following ISO 8655 methodology, remote operation via OctoPrint and OctoEverywhere, and an open, modifiable codebase designed for extension.
 
+![Liquid handler demo](Media/Videos/demo.gif)
 
 ---
 
-## Hardware Overview
+## Features
 
-![Setting Up Mount](Media/Images/IMG_9890.jpeg)
-
-The core modification replaces the Ender 3's extruder with a manual pipette mounted  with an actuator on the X-axis carriage. The printer's existing motion system handles X/Y positioning; a custom Z-axis height and E-axis (extruder stepper) movement drives the actuator for pipette aspiration and dispensing.
-
-**Key Design Decisions:**
-
-- **Linear Actuator use** — built first as a standalone unit to understand linear actuator mechanics before integration. Mount design adapted from published open-source lab automation work with a modified push plate to fit P1000 manual pipette.
-- **Well plate deck** — the stock printer bed has low friction, causing well plate drift during protocol runs from repeated tip impacts. Custom clamps were designed and iterated to secure a custom 96-well plate deck and reservoir holders.
-- **Pipette** — standard manual P1000 single-channel pipette. The actuator drives the plunger through its three mechanical stops (upper stop, soft stop, hard stop) under G-code control.
-- **Gravemetric Calibration** semi-automated gravemetric calibration program for repeat testing and analysis
-- Implementation of a 24 × 4-step 1:2 serial dilution protocol
-
-**Planned expansion:** Raspberry Pi + OctoPrint integration for network control and RPi camera-based automation (in development).
+- **Low cost** — base build under $150 using a used/refurbished Ender 3 Pro; accessible without institutional funding
+- **Modular hardware** — built on a widely-supported 3D printer platform running open-source Marlin firmware; components are replaceable and the design is forkable
+- **Precise, calibrated dispensing** — semi-automated gravimetric calibration workflow following ISO 8655; CV% tracked as the primary acceptance metric
+- **Network connectivity** — full remote operation via OctoPrint + OctoEverywhere: file uploads, G-code terminal, protocol monitoring, and calibration runs without physical access; connection secured through OctoEverywhere (no port forwarding required)
+**Security** - 3rd party application connectivity, OcotoEverywhere prevents need of port forwarding and/or explicit firewall rules to retain security in private network. Camrea also provides remote monitoring of access.
+- **Demonstrated application** — 24-column, 4-step 1:2 serial dilution protocol across a full 96-well plate in a 2-hour automated run; the same architecture supports other repetitive liquid handling workflows such as master mix dispensing and reagent normalization
 
 ---
 
-## Bill of Materials
+## Table of Contents
 
-Base build cost: ~$125
+- [Build Resources](#build-resources)
+  - [Bill of Materials](#bill-of-materials)
+  - [Needed Tools](#needed-tools)
+  - [CAD](#cad)
+- [Software & Plugins](#software--plugins)
+- [General Usage](#general-usage)
+  - [Z-Height Calibration](#z-height-calibration)
+  - [E-Axis Calibration](#e-axis-pipette-stop-calibration)
+  - [Gravimetric Calibration](#gravimetric-calibration)
+- [Serial Dilution Protocol](#serial-dilution-protocol)
+- [Checklist / Roadmap](#checklist--roadmap)
+- [License](#license)
+
+---
+
+## Build Resources
+
+### Bill of Materials(BOM)
+
+**Base build cost: ~$125**
 
 | Category | Item | Notes |
 |---|---|---|
-| Motion platform | Ender 3 Pro (used/refurbished) | Core motion system |
-| Pipette | Single-channel manual pipette | Drives through plunger stops |
-| Deck hardware | Custom 3D-printed clamps, well plate holder, reservoir holder | STL files included |
-| Electronics | Arduino Uno | G-code via Pronterface or SD card |
-| Misc | M3/M5 hardware, 1.5m stepper cable | See BOM.csv for full sourcing |
+| Motion platform | Creality Ender 3 Pro (used/refurbished) | XYZ gantry + E-axis repurposed for plunger actuation |
+| Pipette | Four E's Scientific P1000 single-channel manual pipette | Set to 125µL; drives through plunger stops via actuator |
+| Deck hardware | Custom 3D-printed clamps, well plate holder, reservoir holders | STL files included in `/STL` |
+| Networking | Raspberry Pi (OctoPrint host) | Enables remote network operation |
+| Misc | M3/M5 hardware, 1.5m stepper cable extension | — |
 
 Full BOM with sourcing notes: [`References/BOM.csv`](References/BOM.csv)
 
 ---
 
-## Calibration
+### Needed Tools
+
+- Calipers
+- Precision screwdriver set (Phillips, T8)
+- Rotary tool (or equivalent — for cutting metal rods)
+- ESD-15 tweezers
+
+---
+
+### CAD
+
+All custom parts are designed in Autodesk Fusion. Source files are in `/CAD`; print-ready STLs are in `/STL`.
+
+| Component | Description | STL file | f3d file |
+|---|---|---|
+| Pipette adapter mount | Mounts P1000 pipette to X-axis carriage; includes push plate for actuator contact | [`CAD\STL_files\lh_arm_mount_i1.stl`]( CAD\STL_files\lh_arm_mount_i1.stl)| [``]() |
+| 96-well plate deck | Custom deck with tight-tolerance printed walls to apply onto printed well plate and prevent plate drift |[`CAD\STL_files\96_wp_deck_i2.stl`](CAD\STL_files\96_wp_deck_i2.stl) | [``]() |
+| Reservoir holder | Holds 50mL reservoir tube; slots into bed clamp system |[`CAD\STL_files\dual_holder_minicups_i1.stl`](CAD\STL_files\dual_holder_minicups_i1.stl) | [``]() |
+| Deck2Bed clamps | Secures deck and reservoir holders rigidly to printer bed | |[`CAD\STL_files\deck2bedClamp_i1.stl`](CAD\STL_files\deck2bedClamp_i1.stl) | [``]() |
+
+---
+
+## Software & Plugins
+
+### OctoPrint
+
+OctoPrint runs on a Raspberry Pi connected to the printer's control board, enabling full remote operation — file management, G-code terminal, print monitoring, and protocol execution without physical access to the machine.
+
+Setup guide: [OctoPrint on Raspberry Pi (YouTube)](https://www.youtube.com/watch?v=9FYqQdan-lA)
+
+### Plugins
+
+| Plugin | Purpose | Link |
+|---|---|---|
+| Creality 2x Temperature Reporting Fix | Corrects erroneous temperature doubling on Ender 3 boards | [Plugin page](https://plugins.octoprint.org/plugins/ender3v2tempfix/) |
+| OctoEverywhere | Secure remote access — no port forwarding required; connection is handled through the OctoEverywhere service | [Plugin page](https://plugins.octoprint.org/plugins/octoeverywhere/) |
+
+---
+
+## General Usage
 
 ### Z-Height Calibration
 
-Z-height calibration is performed once using Pronterface for live G-code interaction:
+Performed once using Pronterface for live G-code interaction:
 
-1. Query current absolute position with `M114`
+1. Query current absolute position: `M114`
 2. Navigate to a position above any well using the reported coordinates
 3. Lower Z until the pipette tip is ~1–3 mm above the well surface
-4. Run `G92 Z0` to set this as the Z origin
+4. Set this as Z origin: `G92 Z0`
 
-This Z origin is then used as the reference for all protocol Z values (`STANDBY_Z`, `IMMERSE_Z`, `HOVER_Z`).
+This Z origin becomes the reference for all protocol Z values (`STANDBY_Z`, `IMMERSE_Z`, `HOVER_Z`).
+
+---
 
 ### E-Axis (Pipette Stop) Calibration
 
@@ -80,20 +125,18 @@ Manual pipettes have three mechanical stops:
 - **Soft stop (first stop)** — normal aspiration volume
 - **Hard stop (second stop)** — blow-out position
 
-Unlike manual operation where stops are felt by resistance, the stepper actuator requires empirical calibration. The approach:
+The stepper actuator cannot feel resistance, so stop positions must be empirically calibrated:
 
 1. Estimate the soft stop E distance by measuring plunger height manually
-2. Use Pronterface to empirically determine the E-axis positions corresponding to the pipette's upper, first, and second stops.
-3. Update `E_ZERO_STOP`, `E_FIRST_STOP`, `E_SECOND_STOP` constants in `gc_volume_test.py`
-4. Validate with gravimetric calibration (see below)
+2. Use Pronterface to find the E value at zero stop and the distance from soft stop to hard stop
+3. Update `E_ZERO_STOP`, `E_FIRST_STOP`, `E_SECOND_STOP` in `gc_volume_test.py`
+4. Validate with gravimetric calibration
 
 ---
 
-## Gravimetric Calibration
+### Gravimetric Calibration
 
-Pipette accuracy is validated using gravimetric calibration — measuring the mass of dispensed water and converting to volume. Water density at NTP (0.998 g/mL) is used for conversion. This follows ISO 8655 methodology; CV% is the primary acceptance metric.
-
-### Workflow
+Pipette accuracy is validated by measuring dispensed water mass and converting to volume. Water density at NTP (0.998 g/mL) is used for the conversion. CV% is the primary acceptance metric per ISO 8655.
 
 **Step 1 — Generate test G-code**
 
@@ -101,19 +144,16 @@ Pipette accuracy is validated using gravimetric calibration — measuring the ma
 python gc_volume_test.py
 ```
 
-Outputs `gc_calibration.gcode`. 
-- The protocol runs `TRIAL_NUM` (default: 10) aspirate/dispense cycles, delaying 3 seconds after each aspirate, for the user to tare the scale, and dispense, for the user to read and record the scale reading.
+Outputs `test_col_row_calibration.gcode`. Runs `TRIAL_NUM` aspirate/dispense cycles (default: 5), pausing after each dispense for scale reading via M0 host pause.
 
 **Step 2 — Run the protocol**
 
-Load the G-code via SD card or Pronterface. 
-- After an aspiration there will be 3 seconds delay to tare the scale.
-- After a dispense, there will be 3 second delay to read and record one independent mass reading per trial to `raw_data.txt`.
+Load G-code via SD card or Pronterface. After each M0 pause, weigh the dispensed liquid and record cumulative mass to `raw_data.txt` (one reading per line).
 
 **Step 3 — Analyze results**
 
 ```bash
-python gc_analysis.py raw_data.txt
+python gc_calibration.py raw_data.txt
 ```
 
 Options:
@@ -125,42 +165,60 @@ Outputs a CSV with per-trial transfer mass, volume, and error, plus a summary `.
 
 **Step 4 — Iterate**
 
-Adjust `E_FIRST_STOP` / `E_SECOND_STOP` values based on mean error and re-run until CV and accuracy are within acceptable range.
-
----
-## Running Serial Dilution Protocol
-
-![Completed Serial Dilution 96 well plate](Media/Images/IMG_9983.jpeg)
-- Serial Dilution is a critical component in molecular assays, including multiplexing in NGS  Assay and titer concentration curves in ELISA, utilized in diagnostic, clinical, research, and industry
-
-
-**Step 1 — Ensure Z-height and E-axis calibration have been completed.**
-
-**Step 2 — Add Solvent to  Wells**
-- Add solvent reservoir with 50mL of H2O
-- run solvent_fill.py
-- load and print solvent_fill_prot.gcode
-
-
-**Step 3 — Run Serial Dilution**
-- replace solvent reservoir  with empty waste reservoir
-- add stock reservoir in second slot - add 40 mL and 20 drops of blue dye
-- run serial_dilution.py
-- load and print 24_4_1n2_sd_prot.gcode
-
-
+Adjust `E_FIRST_STOP` / `E_SECOND_STOP` based on mean error and re-run until CV and accuracy are within acceptable range.
 
 ---
 
-## Repository Structure-(files referred shown)
+## Serial Dilution Protocol
+
+Serial dilution is a foundational technique across molecular assays — including titer concentration curves in ELISA, library preparation for NGS, and reagent standardization. This protocol demonstrates the liquid handler running a 24-column, 4-step 1:2 serial dilution across a full 96-well plate in a 2-hour automated run.
+
+![Completed Serial Dilution 96-well plate](Media/Images/IMG_9983.jpeg)
+
+**Step 1 — Verify calibration constants**
+
+Confirm `E_FIRST_STOP`, `E_SECOND_STOP`, and Z-height values are current before running any protocol.
+
+**Step 2 — Fill wells with solvent**
+
+- Add solvent reservoir with 50 mL H₂O
+- Run: `python solvent_fill.py`
+- Load and run: `solvent_fill_prot.gcode`
+
+**Step 3 — Run serial dilution**
+
+- Replace solvent reservoir with empty waste reservoir
+- Add stock reservoir in second slot (40 mL + 20 drops blue dye)
+- Run: `python serial_dilution.py`
+- Load and run: `24_4_1n2_sd_prot.gcode`
+
+---
+
+## Checklist / Roadmap
+
+- [x] Single-channel syringe pump build
+- [x] 96-well plate deck with custom clamp system
+- [x] Semi-automated gravimetric calibration workflow
+- [x] 24-column 4-step 1:2 serial dilution demonstration
+- [x] OctoPrint + OctoEverywhere network integration
+- [ ] RPi camera-based tip detection and alignment
+- [ ] Reservoir container class for simplified custom mount STL generation
+- [ ] Multi-channel head expansion
+- [ ] Full protocol scripting interface
+
+---
+
+## Repository Structure
 
 ```
 ModularLiquidHandler-Ender3/
-├── CAD/                  # AutoDesk Fusion source files
-├── STL/                  # Print-ready STL files for all custom parts
+├── CAD/                      # Autodesk Fusion source files
+├── STL/                      # Print-ready STL files for all custom parts
 ├── Code/
 │   ├── gc_volume_test.py     # Generates gravimetric calibration G-code
-│   └── gc_calibration.py     # Analyzes raw mass data, outputs CSV + summary
+│   ├── gc_calibration.py     # Analyzes raw mass data; outputs CSV + summary
+│   ├── solvent_fill.py       # Generates solvent fill G-code
+│   └── serial_dilution.py    # Generates serial dilution G-code
 ├── References/
 │   ├── BOM.csv               # Full bill of materials with sourcing
 │   └── ...
@@ -169,20 +227,3 @@ ModularLiquidHandler-Ender3/
 
 ---
 
-## Roadmap
-
-- [x] Single-channel syringe pump build
-- [x] 96-well plate deck with custom clamp system
-- [x] Semi-automated gravimetric calibration workflow
-- [x] Demo 24 4 1:2 serial dilution application
-- [ ] Raspberry Pi + OctoPrint network integration
-- [ ] RPi camera-based tip detection and alignment
-- [ ] create reservoir container class to make STLs for custom mount holders simple
-- [ ] Multi-channel head expansion
-- [ ] Full protocol scripting interface
-
----
-
-## License
-
-MIT

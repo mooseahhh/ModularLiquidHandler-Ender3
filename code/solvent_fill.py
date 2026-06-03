@@ -1,8 +1,8 @@
 # this program generates gcode used to fill solvent in all plate wells
 
 # before use,
-#   1. Z axis 0 value needs to be manually calibrated before hand. by moving to appropriate Z height and doing g92 z0.
-#  2.  E axis  0 value needs to be manually calibrated before hand. by moving to appropriate E first stop position and doing g92 E0.
+#  1. Z axis 0 value needs to be manually calibrated before hand. by moving to appropriate Z height and doing g92 z0.
+#  2. E axis  0 value needs to be manually calibrated before hand. by moving to appropriate E first stop position and doing g92 E0.
 #     a. gravimetric cailbration tests are also used beforehand to determine appropriate E first and second stop values for accurate pipetting actions.
 
 from deck_config import (
@@ -22,8 +22,15 @@ from deck_config import (
     E_SECOND_STOP,
 )
 
+from pathlib import Path
+
+GCODE_DIR = Path("gcode")
+GCODE_DIR.mkdir(exist_ok=True)
+
+OUTPUT_FILE = GCODE_DIR / "solvent_fill_prot.gcode"
+
 def main() -> None: 
-    with open("solvent_fill_prot.gcode", "w") as file:
+    with open(OUTPUT_FILE, "w", encoding='utf-8') as file:
         preamble(file)
         set_a1_origin(file)
         solvent_fill_action(file)

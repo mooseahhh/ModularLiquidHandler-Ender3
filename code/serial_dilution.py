@@ -20,8 +20,13 @@ from deck_config import (
     E_ZERO_STOP,
     E_FIRST_STOP,
     E_SECOND_STOP,
+    STOCK_X,
+    STOCK_Y,
+    STOCK_Z,
+    STOCK_Z_DEPTH   
 )
 
+from pathlib import Path
 
 # after solvent fill fxn, user will be prompted to replace solvent reservoir container with waste container. Discard location is set to former solvent location by default.
 DISCARD_X = RES_X
@@ -29,14 +34,17 @@ DISCARD_Y = RES_Y
 DISCARD_Z =  RES_Z
 DISCARD_Z_DEPTH = RES_Z_DEPTH
 
-STOCK_X = 110
-STOCK_Y = 90
-STOCK_Z = SAFE_Z + ABS_Z_OFFSET
-STOCK_Z_DEPTH = WELL_Z - 2
+
+
+
+GCODE_DIR = Path("gcode")
+GCODE_DIR.mkdir(exist_ok=True)
+
+OUTPUT_FILE = GCODE_DIR / "24_4_1n2_sd_prot.gcode"
 
 
 def main() -> None:
-    with open("24_4_1n2_sd_prot.gcode", "w") as file:
+    with open(OUTPUT_FILE, "w", encoding='utf-8') as file:
         preamble(file)
         set_a1_origin(file)
         serial_dilution(file)

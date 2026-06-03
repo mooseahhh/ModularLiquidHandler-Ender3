@@ -1,5 +1,6 @@
-# this program allows for semi-automated gravimetric calibration of the pipette by prompting user to weigh liquid dispensed or aspirated at each step and input weight data into the terminal, which is then recorded in a text file for analysis. Z heights and E values can be manually updated in the program based on gravimetric calibration results for accurate pipetting action.
+# This program generate a gcode file that allows for semi-automated gravimetric calibration of the pipette by prompting user to weigh liquid dispensed or aspirated at each step and input weight data into the terminal. 
 
+from pathlib import Path
 
 TRIAL_NUM = 10 # number of trials to perform for each action to have sufficient data for gravimetric calibration analysis
 # X,Y positions are to manually updated prior to protocol use.
@@ -16,13 +17,17 @@ E_ZERO_STOP = 140
 E_FIRST_STOP = 0
 E_SECOND_STOP = -45
 
-OUTPUT_FILE = "test_gc_calibration.gcode"
 
-DELAY=3000
+GCODE_DIR = Path("gcode")
+GCODE_DIR.mkdir(exist_ok=True)
+
+
+OUTPUT_FILE = GCODE_DIR / "test_gc_calibration.gcode"
+
 
 
 def main()-> None:
-    with open ( OUTPUT_FILE, "w") as file:
+    with open ( OUTPUT_FILE, "w", encoding='utf-8') as file:
         preamble(file)
         gc_test(file)
 
@@ -41,17 +46,20 @@ def preamble(file): # write gcode commands to set up the printer for pipetting
         write_line(file, f"G0 Z{STANDBY_Z:.2f} F2000", "Move Z to safe height")
 
 
-
+def pause(file,comment):    
+    write_line (file,"M118",comment) 
+    write_line(file, f"@pause","prompt pausing for user input to continue")
 
 def asp_dsp_cycle(file,trial): # pipette cycle to enter perform and action and exit well
     write_line(file, f"G1 E{E_FIRST_STOP} F1000", "prep to first stop")
     write_line(file,f"G0 Z{IMMERSE_Z:.2f}", "lower into liquid for immersion")
     write_line(file, f"G1 E{E_ZERO_STOP} F1500", "aspirate")
     write_line(file,f"G0 Z{HOVER_Z:.2f}", "raise to hover height")
-    write_line(file, f"G4 P{DELAY}","delay for tare")
+    pause(file, f"Trial {trial+1}: Please tare scale, then resume.")
     write_line(file, f"G1 E{E_FIRST_STOP}", "dispense")
     write_line(file, f"G1 E{E_SECOND_STOP} F300",  "dispense")
-    write_line(file, f"G4 P{DELAY}","delay for measuring mass")
+    pause(file, f"Trial {trial+1}: Record mass, then resume..")
+
     
 
 

@@ -2,15 +2,22 @@
 
 
 # Z axis needs to be manually calibrated before hand. by moving to appropriate z height and doing g92 z0.
-A1_X = 18
-A1_Y = 107.5
-SAFE_Z = 0
-WELL_Z = SAFE_Z - 9.5 
-WELL_SPACING= 9
-DELAY = 500
+from deck_config import (
+    A1_X,   
+    A1_Y,
+    SAFE_Z,
+    WELL_Z,
+    WELL_SPACING,
+
+)
+from pathlib import Path
+
+GCODE_DIR = Path("gcode")
+GCODE_DIR.mkdir(exist_ok=True)
+OUTPUT_FILE = GCODE_DIR / "test_col_row_align.gcode"
 
 def main():
-    with open("test_col_row_align.gcode", "w") as file:
+    with open(OUTPUT_FILE, "w", encoding='utf-8') as file:
         preamble(file)
         set_a1_origin(file)
         column_action(file)
@@ -43,15 +50,13 @@ def lower_raise(file): # fxn for pipette to enter and exit well
 def column_action(file,columns=12): # perform pipette action for each row of the plate, moving down the rows and then back up to the first row at the end
     for i in range(columns):
         write_line(file,f"G0 X{(i)*WELL_SPACING:.2f} Y0 F3000", f"Move to row {i+1}")
-        write_line(file,f"G4 P{DELAY}", f"Delay for {DELAY} ms")
         lower_raise(file)
     write_line(file,f"G0 X0 Y0 F3000", "Move back to column 1")
 
 def row_action(file,row=8): # perform pipette action for each column of the plate, moving down the columns and then back up to the first column at the end
-    curr_y_pos = -WELL_SPACING # to stop double visiting A1
+    curr_y_pos = -WELL_SPACING # to skip A1 - prevent double visiting 
     for i in range(row-1):
         write_line(file,f"G0 X0 Y{curr_y_pos + (-i)*WELL_SPACING:.2f} F3000", f"Move to column {i+1}")
-        write_line(file,f"G4 P{DELAY}", f"Delay for {DELAY} ms")
         lower_raise(file)
     write_line(file,f"G0 X0  Y0 F3000", "Move back to top of row ")
 

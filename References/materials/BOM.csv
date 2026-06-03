@@ -5,26 +5,24 @@ Last Updated:,05/21/26,,,,,,,,
 ,,,,,,,,,
 TOTALS,GROUP-INFO,Item,Purpose,Qty,Qty Used,Cost of items used,Approx Cost,Link,Notes
 ,Base,Ender3-Pro,modifiable 3+1 axis machine base,1,1,60.00,60,https://www.ebay.com/sch/i.html?_nkw=ender+3+pro&_sacat=183062&_from=R40&_trksid=p2332490.m570.l2632,
-,,Four E’s P1000,Pipetting,1,1,26.99,26.99,https://www.amazon.com/dp/B01IP5Q8HU,a p200 is more suitable for this but I already had a P1000
+,,Four E’s P1000 manual pipette,Pipetting mechanism,1,1,26.99,26.99,https://www.amazon.com/dp/B01IP5Q8HU,"a p200 is more suitable for this, but I already had this P1000"
 ,,"Saiper Flexible Couplings 5mm to 5mm (5pcs) Aluminum Alloy Joint Connector Compatible with NEMA 17 Stepper Motors, RepRap 3D Printer or CNC Machine, 3D Printer Accessories",couple screw rod to stepper motor rotor,5,1,2.00,9.99,https://www.amazon.com/dp/B07M5Q7HTV,
 ,,5 mm guide rods,guide plunger push plate linearly,2,2,7.59,7.59,https://www.amazon.com/dp/B082ZNSRBN,
-,,pla+ filament (1kg-white),3d printing material,1,1,13.99,13.99,https://www.amazon.com/ELEGOO-Filament-Toughness-Dimensional-Accuracy/dp/B0D41ZDC47/ref=sr_1_3?sr=8-3,can change for different filament just make appropriate slicer configurations.
-,,silicone bumpers(3/8 inch),helps prevent sliding of well plate deck on printer bed,16,4,0.75,2.98,https://www.homedepot.com/pep/Everbilt-3-8-in-Clear-Self-Adhesive-Round-Bumper-16-Pack-41-H1006/328914125?source=shoppingads&locale=en-US&fp=ggl&pla=&mtc=SHOPPING-BF-CDP-GGL-D25H-025_004_BUILDER_HARD-NA-Multi-NA-PMAX-NA-NA-NA-NA-NBR-NA-NA-NA-BuildersHardware_PrioTest3_National,
-,,"m5 thread rod(.8 pitch, 200mm)",thread rod moves effeciently ,5,1,2.12,10.6,https://www.amazon.com/Uxney-Stainless-Corrosion-Resistant-Projects%EF%BC%885/dp/B0FMNTPCC6/ref=sr_1_1?c=ts&s=industrial&sr=1-1&ts_id=16410711,i found single piece for 2.39 at local ace hardware
+,,pla+ filament (1kg),3d printing material,1,1,13.99,13.99,https://www.amazon.com/ELEGOO-Filament-Toughness-Dimensional-Accuracy/dp/B0D41ZDC47/ref=sr_1_3?sr=8-3,can change for different filament just make appropriate slicer configurations.
+,,"m5 thread rod(.8 pitch, 200mm)",thread rod moves effeciently ,5,1,2.12,10.6,https://www.amazon.com/Uxney-Stainless-Corrosion-Resistant-Projects%EF%BC%885/dp/B0FMNTPCC6/ref=sr_1_1?c=ts&s=industrial&sr=1-1&ts_id=16410711,found single piece for 2.39 at my local ace hardware
 ,,"1110 Pcs M3 Screws and Nuts Set, Countersunk Bolts and Nuts Assortment, Black Phillips Flat Head Machine Screws with Washers Set(M3 Screw Kit, Black)",necessary hardware for printed parts,1,1,6.99,6.99,https://www.amazon.com/dp/B0CMCDWWRZ?ref=ppx_yo2ov_dt_b_fed_asin_title&th=1,
-,,super - glue,adhering guide rods and reinforcing hex nut to push plate.,12,2,1.00,5.99,https://www.amazon.com/Adhesive-Cyanoacrylate-Plastic-Ceramic-Leather/dp/B0F6XZFXDB/ref=sr_1_3?sr=8-3,
-,,Small Round Container,reservoir container used,2,2,3.50,3.5,https://www.ebay.com/itm/376219876119,i got mine from dollar tree - 10 for 2 dollars
-TOTAL,,,,,,124.92,148.62,,
-,Optional,1.5M Motor-Connector Cables,extend z axis cable  range,3,1,2.33,6.99,https://www.amazon.com/dp/B0GWMTCMVF,ender3 z axis cable felt too short so 1.5mm cable installed middle wires swapped for stepper motor compability
-,,rotary tool,"for cutting rods to desired size (if available, can be serviced at a hardware store instead)",1,1,22.87,22.87,https://www.amazon.com/GINELSON-Accessory-Accessories-Engraving-Polishing/dp/B0BBWKKQWV/ref=sr_1_4?s=hi&sr=1-4,
-,,microsd,for transfering prints and memory for rpi,2,2,40.11,40.11,https://www.amazon.com/dp/B07XDCZ9J3,
-,,digital calipers,measuring necessary dimensions,1,1,7.99,7.99,https://www.amazon.com/dp/B07VSVMWTJ,necessary measurement  tool if not already in possession
-,,precision screwdriver set,"tighten coupling nut, screws",1,1,8.99,8.99,https://www.amazon.com/Precision-Screwdriver-Security-Phillips-Doorbell/dp/B09FFCGLHK/ref=sr_1_6?sr=8-6,
-OPT TOTAL,,,,,,82.29,86.95,,
-,To be added,rpi 4b 8gb,to add network capabilites via octo print and camera based calibration and monitoring,1,1,187.41,187.41,https://www.amazon.com/Raspberry-Pi-Computer-Suitable-Workstation/dp/B0899VXM8F,
+,,Super Glue,adhesion of guide rods and reinforcing hex nut to push plate.,12,2,1.00,5.99,https://www.amazon.com/Adhesive-Cyanoacrylate-Plastic-Ceramic-Leather/dp/B0F6XZFXDB/ref=sr_1_3?sr=8-3,
+,,Small Round Container,reservoir containers used,1,2,7.00,3.5,https://www.ebay.com/itm/376219876119,"dollar tree - 10 for $2 dollars (2, 2 oz polypropelene sauce containers would also suffice) - it actually cost 40 cents"
+,,Distilled Water,solvent,1,1,1.39,1.39,https://www.target.com/p/baby-water-distilled-formula-128-fl-oz-good-38-gather-8482/-/A-92243568?sid=1548S&TCID=PDS-336242809&ds_rl=1246978&ds_rl=1242884,
+,,Coloring Dye,for making visual solute,1,1,3.99,3.99,https://www.target.com/p/food-coloring-38-egg-dye-4pk-1-2-fl-oz-market-pantry-8482/-/A-82325334?sid=1548S&TCID=PDS-22547586861,
+TOTAL,,,,,,133.06,151.02,,
+,Optional,1.5M Motor-Connector Cables,extend z axis cable range,3,1,2.33,6.99,https://www.amazon.com/dp/B0GWMTCMVF,ender3 z axis cable felt too short so 1.5mm cable installed middle wires swapped for stepper motor compability
+,,silicone bumpers(3/8 inch),helps prevent sliding of well plate deck on printer bed,16,4,0.75,2.98,https://www.homedepot.com/pep/Everbilt-3-8-in-Clear-Self-Adhesive-Round-Bumper-16-Pack-41-H1006/328914125?source=shoppingads&locale=en-US&fp=ggl&pla=&mtc=SHOPPING-BF-CDP-GGL-D25H-025_004_BUILDER_HARD-NA-Multi-NA-PMAX-NA-NA-NA-NA-NBR-NA-NA-NA-BuildersHardware_PrioTest3_National,
+,,sandisk ultra 64gb microsd,for transfering prints and os memory for rpi,2,2,40.11,40.11,https://www.amazon.com/dp/B07XDCZ9J3,
+,,VWR 10062-900 Tissue Culture Plate 96-Wells-F Sterile ,sterilized 96 well plate,1,1,3.00,3,https://www.ebay.com/itm/226150753653,
+,,rpi 4b 8gb,to add network capabilites via octo print aswell as camera based calibration and monitoring,1,1,187.41,187.41,https://www.amazon.com/Raspberry-Pi-Computer-Suitable-Workstation/dp/B0899VXM8F,
 ,,power supply for rpi 4b,power for raspberry pi,1,1,9.85,9.85,https://www.amazon.com/dp/B0FPF3PBGV,
 ,,"Arducam Motorized Focus Pi Camera, Autofocus for Raspberry Pi Camera Module, Motorized Lens, Software Precise Manual Focus, OV5647 5MP 1080P",adjustable focus camera for calibration and monitoring,1,1,14.99,14.99,https://www.amazon.com/dp/B07SN8GYGD,
-TBA TOTAL,,,,,,212.25,212.25,,
-BASE+OPT TOTAL,,,,,,207.21,235.57,,
-BASE+To be added TOTAL ,,,,,,337.17,360.87,,
-OVERALL TOTAL,,,,,,419.46,447.82,,
+OPT TOTAL,,,,,,258.44,265.33,,
+,,,,,,,,,
+BASE+OPT TOTAL,,,,,,391.49,416.35,,
