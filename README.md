@@ -7,7 +7,7 @@ Mechanical design: [Creative Commons Attribution 4.0 International](http://creat
 
 [![CC BY 4.0](https://licensebuttons.net/l/by/4.0/88x31.png)](http://creativecommons.org/licenses/by/4.0/)
 ---
-# Modular, Remote Access Liquid Handler — Ender 3 Pro
+# Modular, Remotely Accessable, Open Source Liquid Handler — Ender 3 Pro
 ![Liquid handler demo](Media/Videos/Demo.gif)
 
 #### To provide automation accessiblity, This project showcases a fully functional, network/remote-access capable liquid handler built by modifying a used Ender 3 Pro 3D printer for **under $150**.
@@ -35,6 +35,7 @@ Mechanical design: [Creative Commons Attribution 4.0 International](http://creat
   - [CAD](#cad)
 - [Software & Plugins](#software--plugins)
 - [ Repository Structure](#repository-structure)
+- [Calibration](#calibration)
   - [Z-Height Calibration](#z-height-calibration)
   - [E-Axis Calibration](#e-axis-pipette-stop-calibration)
   - [Gravimetric Calibration](#gravimetric-calibration)
@@ -109,37 +110,10 @@ ModularLiquidHandler-Ender3/
 ```
 ## Calibration:
 
-### Z-Height Calibration
+- Z-height was calibrated using Pronterface and G92 Z0.
+- E-axis positions corresponding to the pipette's upper, first, and second stops were determined empirically using gravimetric validation.
 
-Performed once using Pronterface for live G-code interaction:
-
-1. Query current absolute position: `M114`
-2. Navigate to a position above any well using the reported coordinates
-3. Lower Z until the pipette tip is ~1–3 mm above the well surface
-4. Set this as Z origin: `G92 Z0`
-
-This Z origin becomes the reference for all protocol Z values (`STANDBY_Z`, `IMMERSE_Z`, `HOVER_Z`).
-
----
-
-### E-Axis (Pipette Stop) Calibration
-
-Manual pipettes have three mechanical stops:
-
-- **Upper stop (zero stop)** — plunger at rest
-- **Soft stop (first stop)** — normal aspiration volume
-- **Hard stop (second stop)** — blow-out position
-
-The stepper actuator cannot feel resistance, so stop positions must be empirically calibrated:
-
-1. Estimate the soft stop E distance by measuring plunger height manually
-2. Use Pronterface to find the E value at zero stop and the distance from soft stop to hard stop
-3. Update `E_ZERO_STOP`, `E_FIRST_STOP`, `E_SECOND_STOP` in `gc_volume_test.py`
-4. Validate with gravimetric calibration
-
----
-
-### Gravimetric Calibration
+### Gravimetric Valibration
 
 Pipette accuracy is validated by measuring dispensed water mass and converting to volume. Water density at NTP (0.998 g/mL) is used for the conversion. CV% is the primary acceptance metric per ISO 8655.
 
