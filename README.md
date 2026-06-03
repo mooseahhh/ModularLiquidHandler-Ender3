@@ -10,31 +10,31 @@ Mechanical design: [Creative Commons Attribution 4.0 International](http://creat
 # Modular, Remote Access Liquid Handler — Ender 3 Pro
 ![Liquid handler demo](Media/Videos/Demo.gif)
 
-#### A fully functional, networked liquid handler built by modifying a used Ender 3 Pro 3D printer for **under $150**. 
+#### To provide automation accessiblity, This project showcases a fully functional, network/remote-access capable liquid handler built by modifying a used Ender 3 Pro 3D printer for **under $150**.
 - Supports single-channel pipetting to a 96-well plate format with semi-automated gravimetric calibration following ISO 8655 methodology, remote operation via OctoPrint and OctoEverywhere, and an open, modifiable codebase designed for extension.
 ---
 ## Features
 - **Low cost** —
-  -  base build under $150 using a used/refurbished Ender 3 Pro; accessible without institutional funding
+  - Base build under $150 using a used/refurbished Ender 3 Pro; accessible without institutional funding
 - **Modular Hardware** —
-  - built on a widely-supported 3D printer platform running open-source Marlin firmware; components are replaceable and the design is forkable
+  - Built on a widely-supported 3D printer platform running open-source Marlin firmware; components are replaceable and the design is forkable
 - **Precise, Calibrated Dispensing** —
   - semi-automated gravimetric calibration workflow CV% tracked as a primary acceptance metric
-  - well alignment, pipette well and reservoir immersion testing
+  - Well alignment, pipette well and reservoir immersion testing
 - **Network Connectivity** —
-  - full remote operation via OctoPrint + OctoEverywhere: file uploads, G-code terminal, protocol monitoring, and calibration runs without physical access
+  - Full remote operation via OctoPrint + OctoEverywhere: file uploads, G-code terminal, protocol monitoring, and calibration runs without physical access
 - **Security** —
   - OctoEverywhere enables remote monitoring and control without exposing the printer through direct port forwarding
 - **Demonstrated Application** —
-  - 24-column, 4-step 1:2 serial dilution protocol across a full 96-well plate in a 2-hour automated run provided
+  - 24-column, 4-step 1:2 serial dilution protocol across a full 96-well plate in a 2-hour automated run
 ---
 ## Table of Contents
 - [License](#license)
 - [Build Resources](#build-resources)
-  - [BOM (Bill of Materials)](#bom-bill-of-materials)
+  - [BOM(Bill of Materials)](#bom-bill-of-materials)
   - [CAD](#cad)
 - [Software & Plugins](#software--plugins)
-- [General Usage](#general-usage)
+- [ Repository Structure](#repository-structure)
   - [Z-Height Calibration](#z-height-calibration)
   - [E-Axis Calibration](#e-axis-pipette-stop-calibration)
   - [Gravimetric Calibration](#gravimetric-calibration)
@@ -56,7 +56,6 @@ Mechanical design: [Creative Commons Attribution 4.0 International](http://creat
 | **Four E's Scientific P1000 single-channel manual pipette** | Pipette | Set to 125µL; drives through plunger stops via actuator |
 |**Custom 3D-printed clamps, well plate holder, reservoir holders** |Deck hardware| STL files included in `/STL` |
 |**Raspberry Pi (OctoPrint host)** | Networking, Remote Monitoring |  Enables remote network operation |
-|** 1.5m stepper cable extension** | Misc | — |
 
 Full BOM with sourcing notes: [`References/BOM.csv`](References/BOM.csv)
 
@@ -92,7 +91,22 @@ Setup guide: [OctoPrint on Raspberry Pi (YouTube)](https://www.youtube.com/watch
 | OctoEverywhere | Secure remote access — no port forwarding required; connection is handled through the OctoEverywhere service | [Plugin page](https://plugins.octoprint.org/plugins/octoeverywhere/) |
 
 ---
-
+## Repository Structure
+```
+ModularLiquidHandler-Ender3/
+├── CAD/                      # Autodesk Fusion source files
+├── STL/                      # Print-ready STL files for all custom parts
+├── Code/
+    Tests/
+│   ├── gc_test.py     # Generates gravimetric calibration G-code
+│   ├── gc_calibration.py     # Analyzes raw mass data; outputs CSV + summary
+│  ├── solvent_fill.py       # Generates solvent fill G-code
+│  └── serial_dilution.py    # Generates serial dilution G-code
+├── References/
+│   ├── BOM.csv               # Full bill of materials with sourcing
+│   └── ...
+└── README.md
+```
 ## Calibration:
 
 ### Z-Height Calibration
@@ -132,7 +146,7 @@ Pipette accuracy is validated by measuring dispensed water mass and converting t
 **Step 1 — Generate test G-code**
 
 ```bash
-python gc_volume_test.py
+python gc_test.py
 ```
 
 Outputs `test_col_row_calibration.gcode`. Runs `TRIAL_NUM` aspirate/dispense cycles (default: 5), pausing after each dispense for scale reading via M0 host pause.
@@ -183,7 +197,6 @@ Confirm `E_FIRST_STOP`, `E_SECOND_STOP`, and Z-height values are current before 
 - Run: `python serial_dilution.py`
 - Load and run: `24_4_1n2_sd_prot.gcode`
 
----
 
 ## Checklist / Roadmap
 
@@ -196,25 +209,6 @@ Confirm `E_FIRST_STOP`, `E_SECOND_STOP`, and Z-height values are current before 
 - [ ] Parameteric reservoir container class program that generates simplified custom mount STL generation
 - [ ] Multi-channel head expansion
 - [ ] Full protocol scripting interface
-
----
-
-## Repository Structure
-
-```
-ModularLiquidHandler-Ender3/
-├── CAD/                      # Autodesk Fusion source files
-├── STL/                      # Print-ready STL files for all custom parts
-├── Code/
-│   ├── gc_volume_test.py     # Generates gravimetric calibration G-code
-│   ├── gc_calibration.py     # Analyzes raw mass data; outputs CSV + summary
-│   ├── solvent_fill.py       # Generates solvent fill G-code
-│   └── serial_dilution.py    # Generates serial dilution G-code
-├── References/
-│   ├── BOM.csv               # Full bill of materials with sourcing
-│   └── ...
-└── README.md
-```
 
 ---
 
