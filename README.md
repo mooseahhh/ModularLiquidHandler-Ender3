@@ -1,3 +1,5 @@
+
+# Modular Liquid Handler — Ender 3 Pro
 ## License
 
 Software: [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
@@ -7,13 +9,12 @@ Mechanical design: [Creative Commons Attribution 4.0 International](http://creat
 [![CC BY 4.0](https://licensebuttons.net/l/by/4.0/88x31.png)](http://creativecommons.org/licenses/by/4.0/)
 ---
 
-# Modular Liquid Handler — Ender 3 Pro
 
 Liquid handling automation is standard practice in modern labs — but commercial systems cost thousands to tens of thousands of dollars, putting them out of reach for hobbyists, teaching labs, indie biotech, and budget-constrained core facilities. This project closes that gap.
 
 A fully functional, networked liquid handler built by modifying a used Ender 3 Pro 3D printer for **under $150**. Supports single-channel pipetting to a 96-well plate format with semi-automated gravimetric calibration following ISO 8655 methodology, remote operation via OctoPrint and OctoEverywhere, and an open, modifiable codebase designed for extension.
 
-![Liquid handler demo](Media/Videos/demo.gif)
+![Liquid handler demo](Media/Videos/Demo.gif)
 
 ---
 
@@ -23,7 +24,7 @@ A fully functional, networked liquid handler built by modifying a used Ender 3 P
 - **Modular hardware** — built on a widely-supported 3D printer platform running open-source Marlin firmware; components are replaceable and the design is forkable
 - **Precise, calibrated dispensing** — semi-automated gravimetric calibration workflow following ISO 8655; CV% tracked as the primary acceptance metric
 - **Network connectivity** — full remote operation via OctoPrint + OctoEverywhere: file uploads, G-code terminal, protocol monitoring, and calibration runs without physical access; connection secured through OctoEverywhere (no port forwarding required)
-**Security** - 3rd party application connectivity, OcotoEverywhere prevents need of port forwarding and/or explicit firewall rules to retain security in private network. Camrea also provides remote monitoring of access.
+- **Security** - 3rd party application connectivity, OcotoEverywhere prevents need of port forwarding and/or explicit firewall rules to retain security in private network. Camrea also provides remote monitoring of access.
 - **Demonstrated application** — 24-column, 4-step 1:2 serial dilution protocol across a full 96-well plate in a 2-hour automated run; the same architecture supports other repetitive liquid handling workflows such as master mix dispensing and reagent normalization
 
 ---
