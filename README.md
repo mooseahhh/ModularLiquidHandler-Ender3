@@ -10,19 +10,19 @@ Mechanical design: [Creative Commons Attribution 4.0 International](http://creat
 # Modular, Remotely Accessible, Open Source Liquid Handler — Ender 3 Pro
 ![Liquid handler demo](Media/Videos/Demo.gif)
 
-#### This project showcases a fully functional, network/remote-access capable liquid handler built by modifying a used Ender 3 Pro 3D printer for **under $150**.
-- Supports single-channel pipetting to a 96-well plate format using gravimetric calibration principles described in ISO 8655, remote operation via OctoPrint and OctoEverywhere, an open, modifiable codebase designed for extension,and the execution of laboratory protocols using custom Python and G-code workflows.
----
+### Commercial liquid handlers can be expensive costing thousands of dollars and restrictions in modularity. This project showcases a fully functional, network/remote-access capable liquid handler built by modifying a used Ender 3 Pro 3D printer for **under $150**.
+- A single-channel pipetting calibrated, Raspberry Pi-enabled remote integration, and an open, modifiable codebase running custom Python to G-code mapping workflows.
+
 ## Features
-- **Low cost** —
+- **Low Cost** —
   - Base build under $150 using a used/refurbished Ender 3 Pro; accessible without institutional funding
 - **Modular Hardware** —
   - Built on a widely-supported 3D printer platform running open-source Marlin firmware; components are replaceable and the design is forkable
 - **Precise, Calibrated Dispensing** —
-  - semi-automated gravimetric calibration workflow CV% tracked as a primary acceptance metric
-  - Well alignment, pipette well and reservoir immersion testing
+  - semi-automated gravimetric calibration workflow CV% tracked as a primary acceptance metric  following ISO 8655 gravimetric principles
+  - Well alignment, pipette well and reservoir immersion tests
 - **Network Connectivity** —
-  - Full remote operation via OctoPrint + OctoEverywhere: file uploads, G-code terminal, protocol monitoring, and calibration runs without physical access
+  - Full remote operation via OctoPrint + OctoEverywhere plugin: file uploads, G-code terminal, protocol monitoring, and calibration runs without physical access
 - **Security** —
   - OctoEverywhere enables remote monitoring and control without exposing the printer through direct port forwarding
 - **Demonstrated Application** —
@@ -40,7 +40,7 @@ Mechanical design: [Creative Commons Attribution 4.0 International](http://creat
 ---
 ## Table of Contents
 - [License](#license)
-- [Current Validaion Results](#current-validation-results)
+- [Current Validation Results](#current-validation-results)
 - [Build Resources](#build-resources)
   - [BOM(Bill of Materials)](#bom-bill-of-materials)
   - [CAD](#cad)
@@ -78,11 +78,14 @@ All custom parts are designed in Autodesk Fusion. Source files are in `/CAD`;
 | Component  | STL file | F3D file |
 |---|---|---|
 | Liquid handler arm mount | [`lh_arm_mount_i1.stl`]( CAD/STL_files/lh_arm_mount_i1.stl)|[`lh_arm_mount_i1.f3d`](CAD/F3D_files/lh_arm_mount_i1.f3d) |
-| Pipette adapter mount | [`pipette_holder_s2_i2.stl`]( CAD/STL_files/pipette_holder_s2_i2.stl)|N/A |
+| actuator plunger push plate | [`plunger_push_plate_i4.stl`]( CAD/STL_files/plunger_push_plate_i4.stl)|[`plunger_push_plate_i4.f3d`](CAD/F3D_files/plunger_push_plate_i4.f3d) |
+| Pipette mount | [`pipette_mount_i2.stl`]( CAD/STL_files/pipette_mount_i2.stl)|[`pipette_mount_i2.f3d`](CAD/F3D_files/pipette_mount_i2.f3d) |
 | 96-well plate deck|[`96_wp_deck_i2.stl`](/CAD/STL_files/96_wp_deck_i2.stl)| [`96_wp_deck_i2.f3d`](/CAD/F3D_files/96_wp_deck_i2.f3d)|
+| vwr cell culture 96-well plate deck|[`vwr_96_wp_deck_i2.stl`](/CAD/STL_files/vwr_96_wp_deck_i2.stl)| [`vwr_96_wp_deck_i2.f3d`](/CAD/F3D_files/vwr_96_wp_deck_i2.f3d)|
 | Reservoir holder |[`dual_holder_minicups_i1.stl`](/CAD/STL_files/dual_holder_minicups_i1.stl) | [`dual_holder_minicups_i1.f3d`](/CAD/F3D_files/dual_holder_minicups_i1.f3d) |
 | Deck2Plate clamps |[`deck2plateClamp_I1.stl`](CAD/STL_files/deck2plateClamp_I1.stl)|[`deck2plateClamp_I1.f3d`](/CAD/F3D_files/deck2plateclamp_i1.f3d)|
 | Deck2Bed clamps |[`deck2bedClamp_i1.stl`](CAD/STL_files/deck2bedClamp_i1.stl)|[`deck2bedClamp_i1.f3d`](/CAD/F3D_files/deck2bedClamp_i1.f3d)|
+| Reservoir2Deck adapter clamp |[`res2deckClamp_i3.stl`](CAD/STL_files/res2deckClamp_i3.stl)|[`res2deckClamp_i3.f3d`](/CAD/F3D_files/res2deckClamp_i3.f3d)|
 
 ---
 
@@ -117,7 +120,7 @@ ModularLiquidHandler-Ender3/
 │   └── BOM.csv
 └── README.md
 ```
-## Calibration:
+## Calibration
 
 - Z-height was calibrated using Pronterface and G92 Z0.
 - E-axis positions corresponding to the pipette's upper, first, and second stops were determined empirically using gravimetric validation.
@@ -189,7 +192,7 @@ Confirm `E_FIRST_STOP`, `E_SECOND_STOP`, and Z-height values are current before 
 - [x] 24-column 4-step 1:2 serial dilution demonstration
 - [x] OctoPrint + OctoEverywhere network integration
 - [ ] RPi camera-based tip detection and alignment
-- [ ] Parametric reservoir holder generator for simplified custom mount STL generation
+- [ ] Parametric reservoir holder generating script for simplified custom STL holder generation
 - [ ] Multi-channel head expansion
 - [ ] Full protocol scripting interface
 
