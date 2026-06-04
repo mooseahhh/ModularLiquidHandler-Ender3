@@ -10,21 +10,21 @@ Mechanical design: [Creative Commons Attribution 4.0 International](http://creat
 # Modular, Remotely Accessible, Open Source Liquid Handler — Ender 3 Pro
 ![Liquid handler demo](Media/Videos/Demo.gif)
 
-### Commercial liquid handlers can be expensive costing thousands of dollars and restrictions in modularity. This project showcases a fully functional, network/remote-access capable liquid handler built by modifying a used Ender 3 Pro 3D printer for **under $150**.
-- A single-channel pipetting calibrated, Raspberry Pi-enabled remote integration, and an open, modifiable codebase running custom Python to G-code mapping workflows.
+### This project showcases a fully functional, network/remote-access capable liquid handler built by modifying a used Ender 3 Pro 3D printer for **under $150**.
 
 ## Features
 - **Low Cost** —
   - Base build under $150 using a used/refurbished Ender 3 Pro; accessible without institutional funding
 - **Modular Hardware** —
   - Built on a widely-supported 3D printer platform running open-source Marlin firmware; components are replaceable and the design is forkable
+
 - **Precise, Calibrated Dispensing** —
   - semi-automated gravimetric calibration workflow CV% tracked as a primary acceptance metric  following ISO 8655 gravimetric principles
   - Well alignment, pipette well and reservoir immersion tests
 - **Network Connectivity** —
   - Full remote operation via OctoPrint + OctoEverywhere plugin: file uploads, G-code terminal, protocol monitoring, and calibration runs without physical access
-- **Security** —
-  - OctoEverywhere enables remote monitoring and control without exposing the printer through direct port forwarding
+- **Flexible Scripting** —
+  - Gcode generating scripts can be utilized to make simple, customizable, lab protocols in workflows
 - **Demonstrated Application** —
   - 24-column, 4-step 1:2 serial dilution protocol across a full 96-well plate in a 2-hour automated run
 ---
