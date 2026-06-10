@@ -1,12 +1,4 @@
 
-## License
-
-Software: [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
-
-Mechanical design: [Creative Commons Attribution 4.0 International](http://creativecommons.org/licenses/by/4.0/)
-
-[![CC BY 4.0](https://licensebuttons.net/l/by/4.0/88x31.png)](http://creativecommons.org/licenses/by/4.0/)
----
 # Modular, Remotely Accessible, Open Source Liquid Handler — Ender 3 Pro
 <img src="Media/Videos/Demo.gif" alt="Liquid handler demo" width="500">
 
@@ -39,7 +31,7 @@ Mechanical design: [Creative Commons Attribution 4.0 International](http://creat
 | Trial Count | 10 |
 ---
 ## Table of Contents
-- [License](#license)
+
 - [Current Validation Results](#current-validation-results)
 - [Build Resources](#build-resources)
   - [BOM(Bill of Materials)](#bom-bill-of-materials)
@@ -49,6 +41,7 @@ Mechanical design: [Creative Commons Attribution 4.0 International](http://creat
 - [Calibration](#calibration)
 - [Serial Dilution Protocol](#serial-dilution-protocol)
 - [Checklist / Roadmap](#checklist--roadmap)
+- [License](#license)
 
 ---
 
@@ -207,6 +200,14 @@ Confirm `E_FIRST_STOP`, `E_SECOND_STOP`, and Z-height values are current before 
 - [ ] RPi camera-based tip detection and alignment
 - [ ] Parametric reservoir holder generating script for simplified custom STL holder generation
 - [ ] Multi-channel head expansion
+---
+## License
+
+Software: [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+
+Mechanical design: [Creative Commons Attribution 4.0 International](http://creativecommons.org/licenses/by/4.0/)
+
+[![CC BY 4.0](https://licensebuttons.net/l/by/4.0/88x31.png)](http://creativecommons.org/licenses/by/4.0/)
 - [ ] Full protocol scripting interface
 
 ---
