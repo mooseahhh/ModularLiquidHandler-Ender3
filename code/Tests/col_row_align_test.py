@@ -2,19 +2,19 @@
 
 
 # Z axis needs to be manually calibrated before hand. by moving to appropriate z height and doing g92 z0.
-from deck_config import (
-    A1_X,   
-    A1_Y,
-    SAFE_Z,
-    WELL_Z,
-    WELL_SPACING,
 
-)
+A1_X = 22.0
+A1_Y = 107.5
+SAFE_Z = 0.0
+WELL_Z = -10.5
+WELL_SPACING = 9.0
+
+
 from pathlib import Path
 
 GCODE_DIR = Path("gcode")
 GCODE_DIR.mkdir(exist_ok=True)
-OUTPUT_FILE = GCODE_DIR / "test_col_row_align.gcode"
+OUTPUT_FILE = GCODE_DIR / "test_col_row_align1.gcode"
 
 def main():
     with open(OUTPUT_FILE, "w", encoding='utf-8') as file:
@@ -63,4 +63,3 @@ def row_action(file,row=8): # perform pipette action for each column of the plat
 
 if __name__ == "__main__":
     main()
-

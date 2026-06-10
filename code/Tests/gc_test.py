@@ -13,9 +13,9 @@ IMMERSE_Z = STANDBY_Z - 45 # Z position for pipette to be immersed in liquid
 HOVER_Z = STANDBY_Z - 30 # Z position for pipette to be at when hovering over liquid without immersion
 
 # E values to be manually updated based on gravimetric calibration results for accurate pipetting action
-E_ZERO_STOP = 140
+E_ZERO_STOP = 150
 E_FIRST_STOP = 0
-E_SECOND_STOP = -45
+E_SECOND_STOP = -50
 
 
 GCODE_DIR = Path("gcode")
@@ -51,13 +51,12 @@ def pause(file,comment):
     write_line(file, f"@pause","prompt pausing for user input to continue")
 
 def asp_dsp_cycle(file,trial): # pipette cycle to enter perform and action and exit well
-    write_line(file, f"G1 E{E_FIRST_STOP} F1000", "prep to first stop")
+    write_line(file, f"G1 E{E_FIRST_STOP} F3000", "prep to first stop")
     write_line(file,f"G0 Z{IMMERSE_Z:.2f}", "lower into liquid for immersion")
-    write_line(file, f"G1 E{E_ZERO_STOP} F1500", "aspirate")
+    write_line(file, f"G1 E{E_ZERO_STOP} ", "aspirate")
     write_line(file,f"G0 Z{HOVER_Z:.2f}", "raise to hover height")
     pause(file, f"Trial {trial+1}: Please tare scale, then resume.")
-    write_line(file, f"G1 E{E_FIRST_STOP}", "dispense")
-    write_line(file, f"G1 E{E_SECOND_STOP} F300",  "dispense")
+    write_line(file, f"G1 E{E_SECOND_STOP} ",  "dispense")
     pause(file, f"Trial {trial+1}: Record mass, then resume..")
 
     
@@ -67,7 +66,7 @@ def gc_test(file): # performs gravimetric calibration test
     # write_line(file,f"G0 X{X_POS} Y{Y_POS}","move pipette appropriate X Y position for GC Test. ")
     for trial in range(TRIAL_NUM):
         asp_dsp_cycle(file,trial)
-    write_line(file,f"G0 Z{STANDBY_Z:.2f} F2000", "raise to safe height at end of test")
+    write_line(file,f"G0 Z{STANDBY_Z:.2f} F3000", "raise to safe height at end of test")
     write_line(file, f"G1 E{E_FIRST_STOP} ", "end at first stop")
         
 

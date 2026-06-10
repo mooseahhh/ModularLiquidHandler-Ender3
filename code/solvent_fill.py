@@ -11,11 +11,11 @@ from deck_config import (
     SAFE_Z,
     WELL_Z,
     WELL_SPACING,
-    ABS_Z_OFFSET,
     SAFE_Z_START,
     RES_X,
     RES_Y,
     RES_Z,
+    ABS_Z_OFFSET,
     RES_Z_DEPTH,
     E_ZERO_STOP,
     E_FIRST_STOP,
@@ -84,10 +84,10 @@ def pipette_actions(file,pipette_action = 'dispense',z_depth = WELL_Z,skip_raise
         write_line(file,f"G0 E{E_FIRST_STOP} F1000", "reset E to first stop after pipette action")
 
 def solvent_action(file): # pathing to solvent reservoir and aspirating 
-    write_line(file,f"G0 Z{RES_Z:.2f} F300", "Move to safe Z height before moving to reservoir")
-    write_line(file,f"G0 X{RES_X:.2f} Y{RES_Y:.2f} Z{RES_Z:.2f} F3000", "align XY above reservoir")
+    write_line(file,f"G0 Z{RES_Z:.2f} F3000", "Move to safe Z height before moving to reservoir")
+    write_line(file,f"G0 X{RES_X:.2f} Y{RES_Y:.2f} F3000", "align XY above reservoir")
     pipette_actions(file,'aspirate',z_depth=RES_Z_DEPTH)
-    write_line(file,f"G0 Z{RES_Z:.2f} F300", "Move to safe Z height before moving to reservoir")
+    write_line(file,f"G0 Z{RES_Z:.2f} F3000", "Move to safe Z height before moving to reservoir")
             
 
 def solvent_fill_action(file,curr_x_pos=0,curr_y_pos=0,columns=12,rows=8): # adds solvent to all wells row by row

@@ -1,20 +1,20 @@
 # This program tests well plate alignment and z height immersion for pipette into the wells. Generates gcode file to be run on printer.
 
-from deck_config import (
-    A1_X,
-    A1_Y,
-    SAFE_Z,
-    WELL_Z,
-    SAFE_Z_START,
-    RES_X,
-    RES_Y,
-    RES_Z,
-    RES_Z_DEPTH,
-    STOCK_X,
-    STOCK_Y,
-    STOCK_Z,
-    STOCK_Z_DEPTH,
-)
+
+A1_X= 19.0
+A1_Y=  109.5
+SAFE_Z= 0.0
+WELL_Z= -10.5
+SAFE_Z_START= 15.0
+RES_X= 26.0
+RES_Y= 90.5
+RES_Z= SAFE_Z + SAFE_Z_START
+RES_Z_DEPTH= WELL_Z - 2
+STOCK_X= 110
+STOCK_Y= 90
+STOCK_Z= SAFE_Z + SAFE_Z_START
+STOCK_Z_DEPTH= WELL_Z - 2
+
 
 
 from pathlib import Path
