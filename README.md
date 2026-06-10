@@ -8,21 +8,21 @@ Mechanical design: [Creative Commons Attribution 4.0 International](http://creat
 [![CC BY 4.0](https://licensebuttons.net/l/by/4.0/88x31.png)](http://creativecommons.org/licenses/by/4.0/)
 ---
 # Modular, Remotely Accessible, Open Source Liquid Handler — Ender 3 Pro
-![Liquid handler demo](Media/Videos/Demo.gif)
+<img src="Media/Videos/Demo.gif" alt="Liquid handler demo" width="500">
 
-### This project showcases a fully functional, network/remote-access capable liquid handler built by modifying a used Ender 3 Pro 3D printer for **under $150**.
+
+### Commercial liquid handlers can cost thousands of dollars and often offer little modularity. This project showcases a fully functional, remote-access capable liquid handler built by modifying a used Ender 3 Pro 3D printer for **under $150**.
 
 ## Features
 - **Low Cost** —
   - Base build under $150 using a used/refurbished Ender 3 Pro; accessible without institutional funding
 - **Modular Hardware** —
   - Built on a widely-supported 3D printer platform running open-source Marlin firmware; components are replaceable and the design is forkable
-
 - **Precise, Calibrated Dispensing** —
   - semi-automated gravimetric calibration workflow CV% tracked as a primary acceptance metric  following ISO 8655 gravimetric principles
   - Well alignment, pipette well and reservoir immersion tests
 - **Network Connectivity** —
-  - Full remote operation via OctoPrint + OctoEverywhere plugin: file uploads, G-code terminal, protocol monitoring, and calibration runs without physical access
+  - Full remote operation via network access through OctoPrint + OctoEverywhere plugin: file uploads, G-code terminal, protocol monitoring, and calibration runs without physical access
 - **Flexible Scripting** —
   - Gcode generating scripts can be utilized to make simple, customizable, lab protocols in workflows
 - **Demonstrated Application** —
@@ -54,7 +54,7 @@ Mechanical design: [Creative Commons Attribution 4.0 International](http://creat
 
 ## Build Resources
 
-### Bill of Materials(BOM)
+### Bill of Materials (BOM)
 
 **Base build cost: ~$130**
 
@@ -62,18 +62,22 @@ Mechanical design: [Creative Commons Attribution 4.0 International](http://creat
 |---|---|---|
 |**Creality Ender 3 Pro (used/refurbished)** | Motion platform | XYZ gantry + E-axis repurposed for plunger actuation |
 | **Four E's Scientific P1000 single-channel manual pipette** | Pipette | Set to 125µL; drives through plunger stops via actuator |
-|**Custom 3D-printed clamps, well plate holder, reservoir holders** |Deck hardware| STL files included in `/STL` |
-|**Raspberry Pi (OctoPrint host)** | Networking, Remote Monitoring |  Enables remote network operation |
+|**Custom 3D-printed clamps, well plate holder, reservoir holders** |Deck hardware| STL files included in [`/CAD/STL_files`](/CAD/STL_files/) |
 
-Full BOM with sourcing notes: [`References/BOM.csv`](References/BOM.csv)
+Full BOM with sourcing notes: [`References/Materials/BOM.csv`](References/Materials/BOM.csv)
 
 ---
 
 ### CAD
 
+<img src="Media/Images/design_process_1.jpeg" alt="designing pipette holder" width="400">
+
+<img src="Media/Videos/CAD_Push_plate.gif" alt="Push Plate CAD Cross section demo" width="200">
+
 All custom parts are designed in Autodesk Fusion. Source files are in `/CAD`; 
 - print-ready STLs are in `/STL_files`
 - modifiable F3D files are in `F3D_files`
+
 
 | Component  | STL file | F3D file |
 |---|---|---|
@@ -87,13 +91,15 @@ All custom parts are designed in Autodesk Fusion. Source files are in `/CAD`;
 | Deck2Bed clamps |[`deck2bedClamp_i1.stl`](CAD/STL_files/deck2bedClamp_i1.stl)|[`deck2bedClamp_i1.f3d`](/CAD/F3D_files/deck2bedClamp_i1.f3d)|
 | Reservoir2Deck adapter clamp |[`res2deckClamp_i3.stl`](CAD/STL_files/res2deckClamp_i3.stl)|[`res2deckClamp_i3.f3d`](/CAD/F3D_files/res2deckClamp_i3.f3d)|
 
+
+
 ---
 
 ## Software & Plugins
 
 ### OctoPrint
 
-OctoPrint runs on a Raspberry Pi connected to the printer's control board, enabling full remote operation — file management, G-code terminal, print monitoring, and protocol execution without physical access to the machine.
+OctoPrint runs on OctoPi OS on Raspberry Pi connected to the printer's control board, enabling full remote operation — file management, G-code terminal, print monitoring, and protocol execution without physical access to the machine.
 
 Setup guide: [OctoPrint on Raspberry Pi (YouTube)](https://www.youtube.com/watch?v=9FYqQdan-lA)
 
@@ -122,10 +128,12 @@ ModularLiquidHandler-Ender3/
 ```
 ## Calibration
 
+
 - Z-height was calibrated using Pronterface and G92 Z0.
 - E-axis positions corresponding to the pipette's upper, first, and second stops were determined empirically using gravimetric validation.
 
 ### Gravimetric Calibration
+<img src="Media/Images/GC_setup.jpeg" alt="GC_setup_pic" width="400">
 
 Pipette accuracy is validated by measuring dispensed water mass and converting to volume. Water density at NTP (0.998 g/mL) is used for the conversion. CV% is the primary acceptance metric per ISO 8655.
 
@@ -135,7 +143,7 @@ Pipette accuracy is validated by measuring dispensed water mass and converting t
 python gc_test.py
 ```
 
-- Outputs `test_col_row_calibration.gcode`. Runs `TRIAL_NUM` aspirate/dispense cycles (default: 5), pausing after each dispense for scale reading via M0 host pause.
+- Outputs `test_gc_calibration.gcode`. Runs `TRIAL_NUM` aspirate/dispense cycles (default: 5), pausing after each dispense for scale reading via M0 host pause.
 
 **Step 2 — Run the protocol**
 
@@ -162,9 +170,12 @@ Adjust `E_FIRST_STOP` / `E_SECOND_STOP` based on mean error and re-run until CV 
 
 ## Serial Dilution Protocol
 
-Serial dilution is a foundational technique across molecular assays — including titer concentration curves in ELISA, library preparation for NGS, and reagent standardization. This protocol demonstrates the liquid handler running a 24-column, 4-step 1:2 serial dilution across a full 96-well plate in a 2-hour automated run.
+<img src="Media/Videos/SD_Horz_Transfer.gif" alt="Mixing and transfer of horizontal serial dilution" width="400">
 
-![Completed Serial Dilution 96-well plate](Media/Images/IMG_9983.jpeg)
+- Serial dilution is a foundational technique across molecular assays — including titer concentration curves in ELISA, library preparation for NGS, and reagent standardization. 
+- This protocol demonstrates the liquid handler running 12 rows A-D vertical and 12 rows E-H Horizontal, 4-step 1:2 serial dilution across a full 96-well plate in a 2.5-hour automated run.
+
+
 
 **Step 1 — Verify Calibration Constants**
 
@@ -181,8 +192,10 @@ Confirm `E_FIRST_STOP`, `E_SECOND_STOP`, and Z-height values are current before 
 - Replace solvent reservoir with empty waste reservoir
 - Add stock reservoir in second slot (40 mL + 20 drops blue dye)
 - Run: `python serial_dilution.py`
-- Load and run: `24_4_1n2_sd_prot.gcode`
+- Load and run: `half_vertical_half_horizontal_24_4_1n2_sd_prot.gcode`
 
+![Completed Serial Dilution 96-well plate](Media/Images/vert_horz_dilution_run%20clear.jpeg)
+- **Completed run of a 12 rows A-D vertical series, 12 rows E-H horizontal series 4, 1:2 Serial Dilution**
 
 ## Checklist / Roadmap
 
