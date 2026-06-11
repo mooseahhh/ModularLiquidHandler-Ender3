@@ -57,7 +57,7 @@
 | **Four E's Scientific P1000 single-channel manual pipette** | Pipette | Set to 125µL; drives through plunger stops via actuator |
 |**Custom 3D-printed clamps, well plate holder, reservoir holders** |Deck hardware| STL files included in [`/CAD/STL_files`](/CAD/STL_files/) |
 
-Full BOM with sourcing notes: [`References/Materials/BOM.csv`](References/Materials/BOM.csv)
+Full BOM with sourcing notes: [`References/materials/BOM.csv`](References/Materials/BOM.csv)
 
 ---
 
