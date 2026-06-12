@@ -200,6 +200,7 @@ Confirm `E_FIRST_STOP`, `E_SECOND_STOP`, and Z-height values are current before 
 - [ ] RPi camera-based tip detection and alignment
 - [ ] Parametric reservoir holder generating script for simplified custom STL holder generation
 - [ ] Multi-channel head expansion
+- [ ] Full protocol scripting interface
 ---
 ## License
 
@@ -208,7 +209,7 @@ Software: [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 Mechanical design: [Creative Commons Attribution 4.0 International](http://creativecommons.org/licenses/by/4.0/)
 
 [![CC BY 4.0](https://licensebuttons.net/l/by/4.0/88x31.png)](http://creativecommons.org/licenses/by/4.0/)
-- [ ] Full protocol scripting interface
+
 
 ---
 
