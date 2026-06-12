@@ -183,7 +183,7 @@ Confirm `E_FIRST_STOP`, `E_SECOND_STOP`, and Z-height values are current before 
 **Step 3 — Run Serial Dilution**
 
 - Replace solvent reservoir with empty waste reservoir
-- Add stock reservoir in second slot (40 mL + 20 drops blue dye)
+- Add stock reservoir in second slot (40 mL + 2 drops of blue dye)
 - Run: `python serial_dilution.py`
 - Load and run: `half_vertical_half_horizontal_24_4_1n2_sd_prot.gcode`
 
